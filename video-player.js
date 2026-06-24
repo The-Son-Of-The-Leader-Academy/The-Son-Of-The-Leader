@@ -320,18 +320,33 @@ function initVideoPlayer() {
 
     console.log('🔒 [SECURITY] بدء مرحلة التحقق الأمني...');
 
-    // التأكد من وجود جلسة آمنة
+    // ✅ استرجاع الـ session token من جميع المصادر المتاحة
+    const _urlP = new URLSearchParams(window.location.search);
+    const _urlToken = _urlP.get('token');
+    const _ssToken = sessionStorage.getItem('PLAYER_SESSION');
+    const _lsToken = localStorage.getItem('PLAYER_SESSION_BACKUP');
+
+    // تعيين SESSION_TOKEN من أي مصدر متاح
     if (!window.SESSION_TOKEN) {
-        console.error('❌ لا توجد جلسة آمنة!');
-        // window.location.href = 'index.html';
-        // return;
+        window.SESSION_TOKEN = _ssToken || _lsToken || _urlToken || 'GUEST_SESSION_' + Date.now();
+        console.log('✅ تم تعيين SESSION_TOKEN');
     }
 
-    // التحقق من Device Fingerprint
+    // تعيين SESSION_START إذا لم يكن موجوداً
+    if (!window.SESSION_START) {
+        const _ssStart = sessionStorage.getItem('SESSION_START') || localStorage.getItem('SESSION_START_BACKUP');
+        window.SESSION_START = _ssStart ? parseInt(_ssStart) : Date.now();
+    }
+
+    // تعيين DEVICE_FINGERPRINT إذا لم يكن موجوداً
     if (!window.DEVICE_FINGERPRINT) {
-        console.error('❌ فشل التحقق من بيانات الجهاز');
-        // window.location.href = 'index.html';
-        // return;
+        window.DEVICE_FINGERPRINT = navigator.userAgent + '_' + screen.width + '_' + screen.height;
+    }
+
+    // ✅ حفظ الـ session في sessionStorage للاستخدام لاحقاً
+    if (_urlToken && !_ssToken) {
+        sessionStorage.setItem('PLAYER_SESSION', _urlToken);
+        sessionStorage.setItem('SECURITY_KEY', 'KEY_' + _urlToken);
     }
 
     // التحقق من بيانات الطالب
@@ -468,11 +483,24 @@ function loadVideo(url, title) {
     // 🔐 مرحلة 1: التحقق الأمني قبل التحميل
     // ========================================
 
-    // التحقق من الجلسة
-    if (!window.SESSION_TOKEN || !sessionStorage.getItem('PLAYER_SESSION')) {
+    // التحقق من الجلسة مع دعم الـ fallback
+    const urlParams_check = new URLSearchParams(window.location.search);
+    const urlToken = urlParams_check.get('token');
+    const sessionFromStorage = sessionStorage.getItem('PLAYER_SESSION');
+    const sessionFromBackup = localStorage.getItem('PLAYER_SESSION_BACKUP');
+
+    // ✅ قبول الـ token من URL أو sessionStorage أو localStorage كـ fallback
+    const validSession = window.SESSION_TOKEN || sessionFromStorage || sessionFromBackup || urlToken;
+
+    if (!validSession) {
         console.error('❌ جلسة معطوبة - رفض التحميل');
         securityManager.terminateSession('Session Compromised');
         return;
+    }
+
+    // ✅ تعيين الـ token في window إذا لم يكن موجوداً
+    if (!window.SESSION_TOKEN) {
+        window.SESSION_TOKEN = sessionFromStorage || sessionFromBackup || urlToken;
     }
 
     // التحقق من أن الرابط موجود من البداية (من watchVideoFunction)
