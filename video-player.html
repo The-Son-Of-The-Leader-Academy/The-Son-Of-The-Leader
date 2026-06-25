@@ -1113,7 +1113,8 @@
         }
         function _extractYTId(url) {
             if (!url) return '';
-            let m = url.match(/(?:youtu\.be\/|v=|\/embed\/)([a-zA-Z0-9_-]{11})/);
+            // يدعم كل أشكال روابط يوتيوب: watch?v=, youtu.be/, /embed/, /shorts/, /live/
+            let m = url.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/)([a-zA-Z0-9_-]{11})/);
             return m ? m[1] : '';
         }
 
@@ -1415,13 +1416,33 @@
 
                 _player.on('error', function () {
                     GL.toast('❌ خطأ في تحميل الفيديو', 'error');
+                    // إظهار رسالة واضحة مع زرار للفتح على YouTube مباشرة
+                    const skeleton = document.getElementById('playerSkeleton');
+                    const container = document.getElementById('vjsContainer');
+                    if (container) container.style.display = 'none';
+                    if (skeleton) {
+                        skeleton.style.display = 'flex';
+                        skeleton.innerHTML = `
+                            <i class="fas fa-circle-exclamation" style="font-size:2.5rem;color:#ff5b5b;"></i>
+                            <span style="color:#e8edf5;font-weight:700;">تعذّر تشغيل الفيديو هنا</span>
+                            <span style="color:#8b96aa;font-size:0.82rem;">قد يكون الفيديو غير متاح للتشغيل المضمّن</span>
+    
+                            </a>`;
+                    }
                 });
             }
 
             function init(videoId) {
                 if (!videoId) {
-                    videoId = VIDEO_CONFIG.fallbackId;
-                    GL.toast('⚠️ لم يتم تحديد فيديو — تشغيل التجريبي', 'info');
+                    // لو مفيش videoId — اعرض رسالة خطأ بدل الـ fallback
+                    const skeleton = document.getElementById('playerSkeleton');
+                    if (skeleton) {
+                        skeleton.innerHTML = `
+                            <i class="fas fa-circle-exclamation" style="font-size:2.5rem;color:#ff5b5b;"></i>
+                            <span style="color:#e8edf5;font-weight:700;">لا يوجد فيديو لهذا الدرس</span>
+                            <span style="color:#8b96aa;font-size:0.82rem;">يرجى التواصل مع الإدارة</span>`;
+                    }
+                    return;
                 }
                 _build(videoId);
             }
