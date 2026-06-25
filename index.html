@@ -3747,7 +3747,116 @@
 
     <link rel="stylesheet" href="responsive-design.css">
     <script src="security-and-live.js" defer></script>
-    <script src="watchVideoFunction.js" defer></script>
+    <script>
+    // ============================================================
+    // watchVideo — مدمج مباشرة بدل watchVideoFunction.js الخارجي
+    // يدعم YouTube / Vimeo / روابط مباشرة (mp4 وغيره)
+    // ============================================================
+    function watchVideo(courseId, title, videoUrl) {
+        if (!videoUrl) {
+            alert('عذراً، لا يوجد فيديو متاح لهذا الدرس.');
+            return;
+        }
+
+        // ---- تحويل رابط YouTube لـ embed ----
+        function getEmbedUrl(url) {
+            if (!url) return '';
+            // youtube.com/watch?v=ID  أو  youtu.be/ID
+            const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+            if (ytMatch) return `https://www.youtube-nocookie.com/embed/${ytMatch[1]}?autoplay=1&rel=0&modestbranding=1`;
+            // vimeo
+            const vmMatch = url.match(/vimeo\.com\/(\d+)/);
+            if (vmMatch) return `https://player.vimeo.com/video/${vmMatch[1]}?autoplay=1`;
+            // رابط مباشر mp4 أو غيره — نرجعه كما هو
+            return url;
+        }
+
+        const embedUrl = getEmbedUrl(videoUrl);
+        const isDirectVideo = !embedUrl.includes('youtube') && !embedUrl.includes('vimeo');
+
+        // ---- بناء الـ overlay ----
+        // إزالة أي player قديم
+        const old = document.getElementById('watchVideoOverlay');
+        if (old) old.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'watchVideoOverlay';
+        overlay.dataset.courseId = courseId;
+        overlay.style.cssText = `
+            position:fixed;inset:0;z-index:99999;
+            background:rgba(0,0,0,0.96);
+            display:flex;flex-direction:column;
+            align-items:center;justify-content:center;
+            backdrop-filter:blur(6px);
+            animation:fadeInOverlay .25s ease;
+        `;
+
+        // إضافة animation
+        if (!document.getElementById('watchVideoStyle')) {
+            const st = document.createElement('style');
+            st.id = 'watchVideoStyle';
+            st.textContent = `
+                @keyframes fadeInOverlay { from{opacity:0;transform:scale(.97)} to{opacity:1;transform:scale(1)} }
+                #watchVideoOverlay .wv-close:hover { background:rgba(255,255,255,.15)!important; }
+            `;
+            document.head.appendChild(st);
+        }
+
+        const safeTitle = title ? title.replace(/</g,'&lt;').replace(/>/g,'&gt;') : 'مشاهدة الفيديو';
+
+        let mediaHTML = '';
+        if (isDirectVideo) {
+            mediaHTML = `<video id="wvPlayer" src="${embedUrl}" controls autoplay
+                style="max-width:100%;max-height:70vh;border-radius:12px;background:#000;outline:none;">
+                متصفحك لا يدعم تشغيل الفيديو.
+            </video>`;
+        } else {
+            mediaHTML = `<iframe id="wvPlayer"
+                src="${embedUrl}"
+                style="width:min(900px,95vw);height:min(506px,54vw);max-height:70vh;border:none;border-radius:12px;"
+                allow="autoplay;fullscreen;picture-in-picture"
+                allowfullscreen>
+            </iframe>`;
+        }
+
+        overlay.innerHTML = `
+            <div style="width:100%;max-width:960px;padding:0 16px;box-sizing:border-box;">
+                <!-- Header -->
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:12px;">
+                    <h3 style="color:#fff;font-family:inherit;font-size:clamp(.9rem,2.5vw,1.15rem);
+                               font-weight:700;margin:0;flex:1;overflow:hidden;
+                               text-overflow:ellipsis;white-space:nowrap;direction:rtl;">
+                        📺 ${safeTitle}
+                    </h3>
+                    <button class="wv-close" onclick="document.getElementById('watchVideoOverlay').remove()"
+                        style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+                               color:#fff;border-radius:10px;padding:8px 16px;cursor:pointer;
+                               font-size:.85rem;font-family:inherit;white-space:nowrap;transition:background .2s;">
+                        ✕ إغلاق
+                    </button>
+                </div>
+                <!-- Player -->
+                <div style="border-radius:14px;overflow:hidden;background:#000;
+                            box-shadow:0 8px 40px rgba(0,0,0,.7);">
+                    ${mediaHTML}
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        // إغلاق بالضغط على الخلفية
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.remove();
+        });
+
+        // إغلاق بـ Escape
+        const onKey = (e) => {
+            if (e.key === 'Escape') { overlay.remove(); document.removeEventListener('keydown', onKey); }
+        };
+        document.addEventListener('keydown', onKey);
+    }
+    </script>
 </head>
 
 <body>
