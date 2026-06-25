@@ -3747,7 +3747,7 @@
 
     <link rel="stylesheet" href="responsive-design.css">
     <script src="security-and-live.js" defer></script>
-    <script src="watchVideoFunction.js" defer></script>
+    <!-- watchVideoFunction مدمجة في الأسفل -->
 </head>
 
 <body>
@@ -7011,6 +7011,23 @@
             const saved = localStorage.getItem(THEME_KEY) || 'dark';
             applyTheme(saved);
         })();
+    </script>
+
+    <!-- ✅ watchVideo inline عشان تكون متاحة في أي وقت -->
+    <script>
+        function watchVideo(courseId, courseTitle, videoUrl) {
+            if (!videoUrl) {
+                alert('عذراً، لا يوجد فيديو متاح لهذا الدرس.');
+                return;
+            }
+            console.log("Opening Video:", { id: courseId, title: courseTitle, url: videoUrl });
+            const params = new URLSearchParams();
+            params.append('courseId', courseId);
+            params.append('title', courseTitle);
+            params.append('url', videoUrl);
+            params.append('timestamp', Date.now());
+            window.location.href = 'video-player.html?' + params.toString();
+        }
     </script>
 </body>
 
