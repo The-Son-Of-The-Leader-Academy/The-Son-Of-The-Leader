@@ -3747,7 +3747,7 @@
 
     <link rel="stylesheet" href="responsive-design.css">
     <script src="security-and-live.js" defer></script>
-    <!-- watchVideoFunction مدمجة في الأعلى -->
+    <script src="watchVideoFunction.js" defer></script>
 </head>
 
 <body>
@@ -4403,17 +4403,6 @@
     </script>
 
     <script>
-        // ✅ watchVideo معرفة هنا في أول الـ script عشان تكون متاحة فوراً
-        function watchVideo(courseId, courseTitle, videoUrl) {
-            if (!videoUrl) { alert('عذراً، لا يوجد فيديو متاح لهذا الدرس.'); return; }
-            const params = new URLSearchParams();
-            params.append('courseId', courseId);
-            params.append('title', courseTitle);
-            params.append('url', videoUrl);
-            params.append('timestamp', Date.now());
-            window.location.href = 'video-player.html?' + params.toString();
-        }
-
         // ═══════════════════════════════════════════════════════════════
         //  STUDENT APP — ALL 6 FIXES APPLIED
         // ═══════════════════════════════════════════════════════════════
@@ -4609,7 +4598,7 @@
                     const container = document.getElementById(containerId);
                     if (!container || container._leaderBound) return;
                     container._leaderBound = true;
-                    container.addEventListener('click', (e) => {
+                    container.addEventListener('click', async (e) => {
                         const card = e.target.closest('.course-card');
                         if (!card) return;
                         const button = e.target.closest('button');
@@ -4628,14 +4617,30 @@
                                 const _unmask = (s) => {
                                     try {
                                         if (!s) return '';
-                                        if (s.startsWith('http')) return s;
-                                        const reversed = s.split('').reverse().join('');
+                                        // فك الـ URL encoding الأول
+                                        let decoded = s;
+                                        try { decoded = decodeURIComponent(s); } catch (_) {}
+                                        if (decoded.startsWith('http')) return decoded;
+                                        const reversed = decoded.split('').reverse().join('');
                                         return decodeURIComponent(escape(atob(reversed)));
-                                    } catch (e) { return s; }
+                                    } catch (e) { return ''; }
                                 };
                                 const maskedUrl = card.dataset.videoUrl || '';
-                                const videoUrl = _unmask(maskedUrl);
-                                if (!videoUrl) { alert('عذراً، لا يوجد فيديو متاح لهذا الدرس.'); return; }
+                                console.log('[DEBUG] maskedUrl:', maskedUrl ? maskedUrl.substring(0,40)+'...' : 'EMPTY');
+                                let videoUrl = _unmask(maskedUrl);
+                                console.log('[DEBUG] videoUrl after unmask:', videoUrl || 'EMPTY');
+                                // لو الـ video_url فاضي (بسبب RLS أو مشكلة في التحميل) — نجيبه مباشرة من Supabase
+                                if (!videoUrl) {
+                                    try {
+                                        const { data: freshData } = await StudentApp.client
+                                            .from('courses').select('video_url').eq('id', courseId).single();
+                                        if (freshData?.video_url) {
+                                            videoUrl = freshData.video_url;
+                                            console.log('[DEBUG] fetched video_url directly:', videoUrl.substring(0,50));
+                                        }
+                                    } catch(fetchErr) { console.error('[DEBUG] fetch error:', fetchErr); }
+                                }
+                                if (!videoUrl) { alert('عذراً، لا يوجد فيديو متاح لهذا الدرس. (تأكد من إضافة رابط الفيديو في لوحة الإدارة)'); return; }
                                 watchVideo(courseId, title, videoUrl);
                             }
                             else if (courseType === 'pdf') StudentApp.actions.downloadPDF(pdfUrl);
@@ -4777,10 +4782,14 @@
                     const allIds = data.map(d => d.id);
                     let privateMap = {};
                     if (allIds.length > 0) {
-                        const { data: privateData } = await StudentApp.client
+                        const { data: privateData, error: privErr } = await StudentApp.client
                             .from('courses').select('id, video_url, pdf_url').in('id', allIds);
+                        if (privErr) console.error('[DEBUG] privateData error (RLS issue?):', privErr);
                         if (privateData) {
                             privateData.forEach(p => { privateMap[p.id] = p; });
+                            console.log('[DEBUG] privateMap loaded:', Object.keys(privateMap).length, 'courses');
+                        } else {
+                            console.warn('[DEBUG] privateData is null/empty — video_url will be missing for all cards!');
                         }
                     }
                     container.innerHTML = data.map(item => {
@@ -5412,7 +5421,7 @@
                     setTimeout(() => window.location.href = 'index.html', 300);
                 },
 
-                handleCourseAction: function (courseId, title, price, type, isFree) {
+                handleCourseAction: async function (courseId, title, price, type, isFree) {
                     if (!StudentApp.state.currentUser) { StudentApp.ui.showAlert('يرجى تسجيل الدخول أولاً', 'error'); return; }
                     if (price > 0 && !isFree) {
                         StudentApp.state.currentCourse = { id: courseId, title, price };
@@ -5447,15 +5456,31 @@
                         const _unmask = (s) => {
                             try {
                                 if (!s) return '';
-                                if (s.startsWith('http')) return s;
-                                const reversed = s.split('').reverse().join('');
+                                // فك الـ URL encoding الأول
+                                let decoded = s;
+                                try { decoded = decodeURIComponent(s); } catch (_) {}
+                                if (decoded.startsWith('http')) return decoded;
+                                const reversed = decoded.split('').reverse().join('');
                                 return decodeURIComponent(escape(atob(reversed)));
-                            } catch (e) { return s; }
+                            } catch (e) { return ''; }
                         };
                         const card = document.querySelector(`.course-card[data-course-id="${courseId}"]`);
                         const maskedUrl = card ? card.dataset.videoUrl : '';
                         const maskedPdf = card ? card.dataset.pdfUrl : '';
-                        const videoUrl = _unmask(maskedUrl);
+                        console.log('[DEBUG] card maskedUrl:', maskedUrl ? maskedUrl.substring(0,40)+'...' : 'EMPTY');
+                        let videoUrl = _unmask(maskedUrl);
+                        console.log('[DEBUG] videoUrl after unmask:', videoUrl || 'EMPTY');
+                        // لو الـ video_url فاضي — نجيبه مباشرة من Supabase
+                        if (!videoUrl && type !== 'pdf') {
+                            try {
+                                const { data: freshData } = await StudentApp.client
+                                    .from('courses').select('video_url').eq('id', courseId).single();
+                                if (freshData?.video_url) {
+                                    videoUrl = freshData.video_url;
+                                    console.log('[DEBUG] fetched video_url directly:', videoUrl.substring(0,50));
+                                }
+                            } catch(fetchErr) { console.error('[DEBUG] fetch error:', fetchErr); }
+                        }
                         const pdfUrl = maskedPdf;
                         if (type === 'pdf') StudentApp.actions.downloadPDF(pdfUrl);
                         else if (type === 'playlist') StudentApp.actions.openPlaylist(courseId, title, videoUrl);
