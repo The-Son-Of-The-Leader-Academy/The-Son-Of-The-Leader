@@ -3747,7 +3747,130 @@
 
     <link rel="stylesheet" href="responsive-design.css">
     <script src="security-and-live.js" defer></script>
+    <script>
+    // ============================================================
+    // watchVideo — بيودي على video-player.html
+    // ============================================================
+    function watchVideo(courseId, title, videoUrl) {
+        if (!videoUrl) {
+            alert('عذراً، لا يوجد فيديو متاح لهذا الدرس.');
+            return;
+        }
+        function _mask(u) {
+            try {
+                const b64 = btoa(encodeURIComponent(u));
+                return b64.split('').reverse().join('');
+            } catch(e) { return u; }
+        }
+        const params = new URLSearchParams();
+        params.append('courseId', courseId);
+        params.append('title', title);
+        params.append('url', _mask(videoUrl));
+        params.append('t', Date.now());
+        window.location.href = 'video-player.html?' + params.toString();
+    }
 
+    // ---- الكود القديم (بيتجاهل الآن) ----
+    function _watchVideoOld_DISABLED(courseId, title, videoUrl) {
+        // ---- تحويل رابط YouTube لـ embed ----
+        function getEmbedUrl(url) {
+            if (!url) return '';
+            // youtube.com/watch?v=ID  أو  youtu.be/ID
+            const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+            if (ytMatch) return `https://www.youtube-nocookie.com/embed/${ytMatch[1]}?autoplay=1&rel=0&modestbranding=1`;
+            // vimeo
+            const vmMatch = url.match(/vimeo\.com\/(\d+)/);
+            if (vmMatch) return `https://player.vimeo.com/video/${vmMatch[1]}?autoplay=1`;
+            // رابط مباشر mp4 أو غيره — نرجعه كما هو
+            return url;
+        }
+
+        const embedUrl = getEmbedUrl(videoUrl);
+        const isDirectVideo = !embedUrl.includes('youtube') && !embedUrl.includes('vimeo');
+
+        // ---- بناء الـ overlay ----
+        // إزالة أي player قديم
+        const old = document.getElementById('watchVideoOverlay');
+        if (old) old.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'watchVideoOverlay';
+        overlay.dataset.courseId = courseId;
+        overlay.style.cssText = `
+            position:fixed;inset:0;z-index:99999;
+            background:rgba(0,0,0,0.96);
+            display:flex;flex-direction:column;
+            align-items:center;justify-content:center;
+            backdrop-filter:blur(6px);
+            animation:fadeInOverlay .25s ease;
+        `;
+
+        // إضافة animation
+        if (!document.getElementById('watchVideoStyle')) {
+            const st = document.createElement('style');
+            st.id = 'watchVideoStyle';
+            st.textContent = `
+                @keyframes fadeInOverlay { from{opacity:0;transform:scale(.97)} to{opacity:1;transform:scale(1)} }
+                #watchVideoOverlay .wv-close:hover { background:rgba(255,255,255,.15)!important; }
+            `;
+            document.head.appendChild(st);
+        }
+
+        const safeTitle = title ? title.replace(/</g,'&lt;').replace(/>/g,'&gt;') : 'مشاهدة الفيديو';
+
+        let mediaHTML = '';
+        if (isDirectVideo) {
+            mediaHTML = `<video id="wvPlayer" src="${embedUrl}" controls autoplay
+                style="max-width:100%;max-height:70vh;border-radius:12px;background:#000;outline:none;">
+                متصفحك لا يدعم تشغيل الفيديو.
+            </video>`;
+        } else {
+            mediaHTML = `<iframe id="wvPlayer"
+                src="${embedUrl}"
+                style="width:min(900px,95vw);height:min(506px,54vw);max-height:70vh;border:none;border-radius:12px;"
+                allow="autoplay;fullscreen;picture-in-picture"
+                allowfullscreen>
+            </iframe>`;
+        }
+
+        overlay.innerHTML = `
+            <div style="width:100%;max-width:960px;padding:0 16px;box-sizing:border-box;">
+                <!-- Header -->
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:12px;">
+                    <h3 style="color:#fff;font-family:inherit;font-size:clamp(.9rem,2.5vw,1.15rem);
+                               font-weight:700;margin:0;flex:1;overflow:hidden;
+                               text-overflow:ellipsis;white-space:nowrap;direction:rtl;">
+                        📺 ${safeTitle}
+                    </h3>
+                    <button class="wv-close" onclick="document.getElementById('watchVideoOverlay').remove()"
+                        style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+                               color:#fff;border-radius:10px;padding:8px 16px;cursor:pointer;
+                               font-size:.85rem;font-family:inherit;white-space:nowrap;transition:background .2s;">
+                        ✕ إغلاق
+                    </button>
+                </div>
+                <!-- Player -->
+                <div style="border-radius:14px;overflow:hidden;background:#000;
+                            box-shadow:0 8px 40px rgba(0,0,0,.7);">
+                    ${mediaHTML}
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        // إغلاق بالضغط على الخلفية
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.remove();
+        });
+
+        // إغلاق بـ Escape
+        const onKey = (e) => {
+            if (e.key === 'Escape') { overlay.remove(); document.removeEventListener('keydown', onKey); }
+        };
+        document.addEventListener('keydown', onKey);
+    }
+    </script>
 </head>
 
 <body>
@@ -4581,7 +4704,10 @@
                     // تشفير الرابط قبل وضعه في الكود لزيادة الأمان
                     const _mask = (u) => {
                         if (!u) return '';
-                        return btoa(unescape(encodeURIComponent(u))).split('').reverse().join('');
+                        try {
+                            const b64 = btoa(encodeURIComponent(u));
+                            return b64.split('').reverse().join('');
+                        } catch(e) { return ''; }
                     };
                     const safeVideoUrl = _mask(course.video_url);
                     const safePdfUrl = (course.pdf_url || '').toString().replace(/"/g, '&quot;');
@@ -4617,12 +4743,11 @@
                                 const _unmask = (s) => {
                                     try {
                                         if (!s) return '';
-                                        // فك الـ URL encoding الأول
                                         let decoded = s;
                                         try { decoded = decodeURIComponent(s); } catch (_) {}
                                         if (decoded.startsWith('http')) return decoded;
                                         const reversed = decoded.split('').reverse().join('');
-                                        return decodeURIComponent(escape(atob(reversed)));
+                                        return decodeURIComponent(atob(reversed));
                                     } catch (e) { return ''; }
                                 };
                                 const maskedUrl = card.dataset.videoUrl || '';
@@ -5461,7 +5586,7 @@
                                 try { decoded = decodeURIComponent(s); } catch (_) {}
                                 if (decoded.startsWith('http')) return decoded;
                                 const reversed = decoded.split('').reverse().join('');
-                                return decodeURIComponent(escape(atob(reversed)));
+                                return decodeURIComponent(atob(reversed));
                             } catch (e) { return ''; }
                         };
                         const card = document.querySelector(`.course-card[data-course-id="${courseId}"]`);
@@ -7060,549 +7185,6 @@
             applyTheme(saved);
         })();
     </script>
-
-    <!-- ============================================================
-         VIDEO PLAYER MODAL — مدمج من video-player.html
-         يُفتح عند استدعاء watchVideo(courseId, title, videoUrl)
-    ============================================================ -->
-
-    <!-- Video.js CSS & JS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.10.0/video-js.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.10.0/video.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-youtube/3.0.1/Youtube.min.js"></script>
-
-    <style>
-        /* ── Player Modal Overlay ── */
-        #vp-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 99999;
-            background: #080d18;
-            flex-direction: column;
-            align-items: center;
-            overflow-y: auto;
-        }
-        #vp-modal.open { display: flex; }
-
-        #vp-modal .vp-wrapper {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 960px;
-            padding: 20px 16px 40px;
-        }
-
-        /* Topbar */
-        #vp-modal .vp-topbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        #vp-modal .vp-title {
-            font-size: clamp(1rem, 2.5vw, 1.2rem);
-            font-weight: 900;
-            color: #e8edf5;
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        #vp-modal .vp-back-btn {
-            display: flex; align-items: center; gap: 6px;
-            padding: 8px 16px;
-            background: rgba(37,99,235,0.12);
-            border: 1px solid rgba(37,99,235,0.3);
-            color: #3b82f6;
-            border-radius: 10px;
-            font-family: inherit; font-size: 0.88rem; font-weight: 700;
-            cursor: pointer; transition: all .2s; min-height: 40px;
-            white-space: nowrap;
-        }
-        #vp-modal .vp-back-btn:hover { background: rgba(37,99,235,0.22); }
-
-        /* Player shell */
-        #vp-modal .vp-shell {
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #000;
-            box-shadow: 0 8px 40px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.07);
-        }
-
-        /* watermark */
-        #vp-modal #vp-wm-layer {
-            position: absolute !important;
-            inset: 0;
-            pointer-events: none;
-            z-index: 2147483647 !important;
-            overflow: hidden;
-        }
-        #vp-modal .wm-item {
-            position: absolute;
-            color: rgba(255,255,255,.45);
-            font-family: inherit; font-weight: 900; font-size: 1.15rem;
-            white-space: nowrap; pointer-events: none; user-select: none;
-            text-shadow: 2px 2px 8px rgba(0,0,0,.9);
-            transform: rotate(-25deg); opacity: 0;
-            transition: opacity .6s ease;
-        }
-
-        /* vjs wrapper */
-        #vp-modal #vp-vjs-wrapper {
-            position: relative; width: 100%; aspect-ratio: 16/9;
-            background: #000; border-radius: 12px; overflow: hidden;
-        }
-        #vp-modal #vp-player { width:100%!important; height:100%!important; position:absolute; inset:0; }
-        #vp-modal #vp-player iframe {
-            top: -60px !important;
-            height: calc(100% + 120px) !important;
-            pointer-events: none !important;
-        }
-
-        /* corner guard */
-        #vp-modal #vp-yt-guard { position:absolute; inset:0; z-index:10; pointer-events:none; }
-        #vp-modal #vp-yt-guard span { position:absolute; pointer-events:all; background:transparent; }
-        #vp-modal #vp-yt-guard .g-tl { top:0; left:0; width:100%; height:60px; }
-        #vp-modal #vp-yt-guard .g-tr { top:0; right:0; width:100%; height:60px; }
-        #vp-modal #vp-yt-guard .g-bl { bottom:55px; left:0; width:100%; height:55px; }
-        #vp-modal #vp-yt-guard .g-br { bottom:55px; right:0; width:100%; height:55px; }
-
-        /* skeleton */
-        #vp-modal .vp-skeleton {
-            width:100%; aspect-ratio:16/9; border-radius:12px;
-            background: linear-gradient(90deg,#131d30 25%,rgba(30,44,70,.4) 50%,#131d30 75%);
-            background-size:200% 100%; animation: vpShimmer 1.6s infinite;
-            display:flex; align-items:center; justify-content:center;
-            flex-direction:column; gap:12px; color:#4d5a70; font-size:.88rem;
-        }
-        @keyframes vpShimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
-        .vp-skeleton-icon { font-size:2.5rem; color:rgba(37,99,235,.12); animation: vpPulse 1.8s ease-in-out infinite; }
-        @keyframes vpPulse { 0%,100%{opacity:.4;transform:scale(1)} 50%{opacity:.8;transform:scale(1.05)} }
-
-        /* controls row */
-        #vp-modal .vp-controls {
-            display:none; align-items:center; justify-content:space-between;
-            padding:14px 16px;
-            background:rgba(19,29,48,.9);
-            border:1px solid rgba(255,255,255,.13); border-top:none;
-            border-radius:0 0 12px 12px; gap:10px; flex-wrap:wrap;
-        }
-        #vp-modal .vp-controls.show { display:flex; }
-        #vp-modal .ctrl-lbl { font-size:.78rem; color:#4d5a70; font-weight:700; }
-        #vp-modal .spd-btns { display:flex; gap:5px; flex-wrap:wrap; }
-        #vp-modal .spd-btn {
-            padding:5px 10px; border-radius:7px;
-            border:1px solid rgba(255,255,255,.13); background:transparent;
-            color:#8b96aa; font-family:inherit; font-size:.78rem; font-weight:700;
-            cursor:pointer; transition:all .2s; min-height:32px;
-        }
-        #vp-modal .spd-btn:hover { background:rgba(37,99,235,.12); color:#3b82f6; }
-        #vp-modal .spd-btn.active { background:#2563eb; color:#fff; border-color:#2563eb; }
-
-        /* quality */
-        #vp-modal .vp-q-btn {
-            display:flex; align-items:center; gap:5px;
-            padding:5px 12px; border-radius:7px;
-            border:1px solid rgba(255,255,255,.13); background:transparent;
-            color:#8b96aa; font-family:inherit; font-size:.78rem; font-weight:700;
-            cursor:pointer; transition:all .2s; min-height:32px; white-space:nowrap;
-        }
-        #vp-modal .vp-q-btn:hover { background:rgba(37,99,235,.12); color:#3b82f6; }
-
-        #vp-modal #vp-q-menu {
-            position:fixed; background:rgba(8,13,24,.97);
-            border:1px solid rgba(255,255,255,.13); border-radius:10px;
-            overflow:hidden; min-width:120px; z-index:999999; display:none;
-            box-shadow:0 8px 32px rgba(0,0,0,.6); backdrop-filter:blur(8px);
-        }
-        #vp-modal #vp-q-menu.open { display:block; animation: qFadeIn2 .15s ease; }
-        @keyframes qFadeIn2 { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-        #vp-modal .vp-q-opt {
-            padding:10px 18px; color:#e8edf5; font-size:.95rem; font-family:inherit;
-            cursor:pointer; transition:background .15s;
-            display:flex; align-items:center; justify-content:space-between; gap:8px;
-            border-bottom:1px solid rgba(255,255,255,.03);
-        }
-        #vp-modal .vp-q-opt:hover { background:rgba(37,99,235,.12); color:#3b82f6; }
-        #vp-modal .vp-q-opt.active { color:#3b82f6; font-weight:800; background:rgba(37,99,235,.1); }
-        #vp-modal .vp-q-opt .vp-q-check { font-size:.85rem; opacity:0; color:#3b82f6; }
-        #vp-modal .vp-q-opt.active .vp-q-check { opacity:1; }
-
-        /* toast */
-        #vp-toast {
-            position:fixed; bottom:24px; left:50%;
-            transform:translateX(-50%) translateY(20px);
-            background:rgba(8,13,24,.97); border:1px solid rgba(255,255,255,.13);
-            border-radius:12px; padding:12px 20px;
-            font-size:.88rem; font-weight:600; color:#e8edf5;
-            z-index:999999; opacity:0; pointer-events:none;
-            transition:opacity .3s, transform .3s;
-            display:flex; align-items:center; gap:8px; min-width:220px; justify-content:center;
-        }
-        #vp-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-        #vp-toast.success { border-color:rgba(34,212,160,.4); color:#22d4a0; }
-        #vp-toast.error   { border-color:rgba(255,91,91,.4); color:#ff5b5b; }
-        #vp-toast.info    { border-color:rgba(37,99,235,.4); color:#3b82f6; }
-
-        /* landscape mobile */
-        @media (max-height:500px) and (orientation:landscape) {
-            #vp-modal .vp-topbar, #vp-modal .vp-controls { display:none!important; }
-            #vp-modal .vp-shell { border-radius:0; }
-            #vp-modal #vp-vjs-wrapper { aspect-ratio:unset!important; height:100vh!important; width:100vw!important; border-radius:0!important; }
-        }
-    </style>
-
-    <!-- Player Modal HTML -->
-    <div id="vp-modal">
-        <div class="vp-wrapper">
-            <!-- Topbar -->
-            <div class="vp-topbar">
-                <h2 class="vp-title" id="vp-title-el">جاري تحميل الدرس...</h2>
-                <button class="vp-back-btn" onclick="VP.close()">
-                    <i class="fas fa-arrow-right"></i> رجوع
-                </button>
-            </div>
-            <!-- Player Shell -->
-            <div class="vp-shell" id="vp-shell">
-                <div class="vp-skeleton" id="vp-skeleton">
-                    <i class="fas fa-circle-play vp-skeleton-icon"></i>
-                    <span>جاري تحميل الفيديو...</span>
-                </div>
-                <div id="vp-wm-layer"></div>
-                <div id="vp-vjs-container" style="display:none; position:relative;">
-                    <div id="vp-vjs-wrapper">
-                        <div id="vp-yt-guard">
-                            <span class="g-tl"></span><span class="g-tr"></span>
-                            <span class="g-bl"></span><span class="g-br"></span>
-                        </div>
-                        <video id="vp-player" class="video-js" playsinline preload="none"></video>
-                    </div>
-                </div>
-            </div>
-            <!-- Controls -->
-            <div class="vp-controls" id="vp-controls">
-                <div style="display:flex;align-items:center;gap:8px;">
-                    <span class="ctrl-lbl"><i class="fas fa-gauge-high"></i> السرعة:</span>
-                    <div class="spd-btns">
-                        <button class="spd-btn" onclick="VP.setSpeed(0.5)">0.5×</button>
-                        <button class="spd-btn" onclick="VP.setSpeed(0.75)">0.75×</button>
-                        <button class="spd-btn active" onclick="VP.setSpeed(1)">1×</button>
-                        <button class="spd-btn" onclick="VP.setSpeed(1.25)">1.25×</button>
-                        <button class="spd-btn" onclick="VP.setSpeed(1.5)">1.5×</button>
-                        <button class="spd-btn" onclick="VP.setSpeed(2)">2×</button>
-                    </div>
-                </div>
-                <button class="vp-q-btn" id="vp-q-btn" onclick="VP.toggleQuality(event)">
-                    <i class="fas fa-film"></i>
-                    <span id="vp-q-label">جودة</span>
-                    <i class="fas fa-chevron-up" style="font-size:.6rem;opacity:.6;"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quality Menu -->
-    <div id="vp-q-menu"></div>
-    <!-- Toast -->
-    <div id="vp-toast"></div>
-
-    <script>
-    // ============================================================
-    //  watchVideo — الدالة الأصلية (من watchVideoFunction.js)
-    // ============================================================
-    function watchVideo(courseId, courseTitle, videoUrl) {
-        if (!videoUrl) {
-            alert('عذراً، لا يوجد فيديو متاح لهذا الدرس.');
-            return;
-        }
-        VP.open(courseId, courseTitle, videoUrl);
-    }
-
-    // ============================================================
-    //  VP — Video Player Module (مدمج من video-player.html)
-    // ============================================================
-    const VP = (function () {
-        let _vjsPlayer = null;
-        let _ready = false;
-        let _speed = 1;
-        let _qOpen = false;
-        let _toastTimer = null;
-
-        // ---- helpers ----
-        function _extractYTId(url) {
-            if (!url) return '';
-            const m = url.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/)([a-zA-Z0-9_-]{11})/);
-            return m ? m[1] : '';
-        }
-
-        function toast(msg, type = 'info', dur = 2800) {
-            const el = document.getElementById('vp-toast');
-            if (!el) return;
-            el.textContent = '';
-            const icon = document.createElement('i');
-            icon.className = type === 'success' ? 'fas fa-circle-check' :
-                             type === 'error'   ? 'fas fa-circle-xmark' : 'fas fa-circle-info';
-            el.appendChild(icon);
-            el.appendChild(document.createTextNode(' ' + msg));
-            el.className = 'show ' + type;
-            clearTimeout(_toastTimer);
-            _toastTimer = setTimeout(() => { el.className = ''; }, dur);
-        }
-
-        function _destroyPlayer() {
-            if (_vjsPlayer) {
-                try { _vjsPlayer.dispose(); } catch(e) {}
-                _vjsPlayer = null;
-                _ready = false;
-            }
-            // إعادة إنشاء عنصر الـ video لأن videojs dispose بيمسحه
-            const wrapper = document.getElementById('vp-vjs-wrapper');
-            if (wrapper) {
-                const oldVideo = document.getElementById('vp-player');
-                if (oldVideo) oldVideo.remove();
-                const v = document.createElement('video');
-                v.id = 'vp-player';
-                v.className = 'video-js';
-                v.setAttribute('playsinline', '');
-                v.setAttribute('preload', 'none');
-                wrapper.appendChild(v);
-            }
-        }
-
-        function _buildPlayer(videoId) {
-            const skeleton    = document.getElementById('vp-skeleton');
-            const container   = document.getElementById('vp-vjs-container');
-            const controlsRow = document.getElementById('vp-controls');
-
-            if (_vjsPlayer) _destroyPlayer();
-
-            _vjsPlayer = videojs('vp-player', {
-                techOrder: ['youtube'],
-                sources: [{ type: 'video/youtube', src: 'https://www.youtube.com/watch?v=' + videoId }],
-                youtube: {
-                    ytControls: 0, rel: 0, showinfo: 0, modestbranding: 1,
-                    iv_load_policy: 3, cc_load_policy: 0, fs: 0, disablekb: 1,
-                    playsinline: 1, enablejsapi: 1, origin: location.origin,
-                },
-                controls: true, autoplay: false, preload: 'none',
-                fluid: true, aspectRatio: '16:9',
-                controlBar: {
-                    children: ['playToggle','volumePanel','currentTimeDisplay','timeDivider','durationDisplay','progressControl','fullscreenToggle'],
-                    volumePanel: { inline: true, vertical: false },
-                    remainingTimeDisplay: false, pictureInPictureToggle: false,
-                    chaptersButton: false, descriptionsButton: false,
-                    subtitlesButton: false, captionsButton: false, audioTrackButton: false,
-                },
-            });
-
-            _vjsPlayer.ready(function () {
-                _ready = true;
-                _vjsPlayer.playbackRate(_speed);
-                if (skeleton)    skeleton.style.display = 'none';
-                if (container)   container.style.display = 'block';
-                if (controlsRow) controlsRow.classList.add('show');
-
-                // نقل طبقة الـ watermark والـ guard جوا المشغل
-                const playerEl  = _vjsPlayer.el();
-                const wmLayer   = document.getElementById('vp-wm-layer');
-                const ytGuard   = document.getElementById('vp-yt-guard');
-                if (wmLayer) playerEl.appendChild(wmLayer);
-                if (ytGuard) playerEl.appendChild(ytGuard);
-
-                toast('✅ الفيديو جاهز', 'success');
-                _vjsPlayer.one('playing', () => _initQuality());
-            });
-
-            _vjsPlayer.on('error', function () {
-                toast('❌ خطأ في تحميل الفيديو', 'error');
-                if (skeleton) {
-                    skeleton.style.display = 'flex';
-                    skeleton.innerHTML = `<i class="fas fa-circle-exclamation" style="font-size:2.5rem;color:#ff5b5b;"></i>
-                        <span style="color:#e8edf5;font-weight:700;">تعذّر تشغيل الفيديو</span>
-                        <span style="color:#8b96aa;font-size:.82rem;">قد يكون الفيديو غير متاح للتشغيل المضمّن</span>`;
-                }
-                if (container) container.style.display = 'none';
-            });
-        }
-
-        function _initQuality() {
-            const menu = document.getElementById('vp-q-menu');
-            const btn  = document.getElementById('vp-q-btn');
-            if (!menu || !btn) return;
-            let yt = null;
-            try { yt = _vjsPlayer.tech({ IWillNotUseThisInPlugins: true }).ytPlayer; } catch (_) {}
-            if (!yt) return;
-
-            const labelMap = {
-                'hd2160':'4K 2160p','highres':'4K','hd1440':'1440p',
-                'hd1080':'1080p','hd720':'720p','large':'480p',
-                'medium':'360p','small':'240p','tiny':'144p',
-            };
-            let levels = [];
-            if (typeof yt.getAvailableQualityLevels === 'function') {
-                levels = yt.getAvailableQualityLevels().filter(l => l !== 'auto' && l !== 'tiny');
-            }
-            if (!levels.length) return;
-
-            const opts = [{ label: 'تلقائي', val: 'auto' }]
-                .concat(levels.map(l => ({ label: labelMap[l] || l, val: l })));
-
-            menu.innerHTML = '<div style="padding:7px 14px 5px;font-size:.68rem;color:#4d5a70;font-weight:700;border-bottom:1px solid rgba(255,255,255,.07);">الجودة</div>' +
-                opts.map(o => `<div class="vp-q-opt${o.val==='auto'?' active':''}" data-val="${o.val}">
-                    <span>${o.label}</span><span class="vp-q-check">✓</span></div>`).join('');
-
-            menu.querySelectorAll('.vp-q-opt').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const val = el.dataset.val;
-                    try {
-                        yt.setPlaybackQuality(val);
-                        if (val !== 'auto') yt.setPlaybackQualityRange(val, val);
-                    } catch (_) {}
-                    const lbl = el.querySelector('span').textContent;
-                    const lblEl = document.getElementById('vp-q-label');
-                    if (lblEl) lblEl.textContent = val === 'auto' ? 'جودة' : lbl;
-                    menu.querySelectorAll('.vp-q-opt').forEach(x => x.classList.remove('active'));
-                    el.classList.add('active');
-                    _closeQuality();
-                    toast('🎬 ' + lbl, 'info');
-                });
-            });
-        }
-
-        function _closeQuality() {
-            _qOpen = false;
-            const m = document.getElementById('vp-q-menu');
-            if (m) m.classList.remove('open');
-        }
-
-        function _initWatermark() {
-            const layer = document.getElementById('vp-wm-layer');
-            if (!layer) return;
-            let text = '';
-            const cur = StudentApp?.state?.currentUser;
-            if (cur) {
-                text = (cur.name || '') + (cur.phone ? ' | ' + cur.phone : '');
-            }
-            if (!text) text = 'ابن القائد';
-            layer.innerHTML = '';
-            for (let i = 0; i < 5; i++) {
-                const el = document.createElement('span');
-                el.className = 'wm-item';
-                el.textContent = text;
-                layer.appendChild(el);
-            }
-            function place() {
-                layer.querySelectorAll('.wm-item').forEach(el => {
-                    el.style.opacity = '0';
-                    setTimeout(() => {
-                        el.style.left = (10 + Math.random() * 75) + '%';
-                        el.style.top  = (10 + Math.random() * 75) + '%';
-                        el.style.opacity = '1';
-                    }, 100);
-                });
-            }
-            place();
-            setInterval(place, 10000);
-        }
-
-        function _bindKeys() {
-            document.addEventListener('keydown', (e) => {
-                const modal = document.getElementById('vp-modal');
-                if (!modal.classList.contains('open')) return;
-                if (!_vjsPlayer || !_ready) return;
-                if (e.code === 'Escape') { close(); return; }
-                if (e.code === 'Space') {
-                    e.preventDefault();
-                    if (_vjsPlayer.paused()) _vjsPlayer.play(); else _vjsPlayer.pause();
-                } else if (e.code === 'ArrowRight') {
-                    e.preventDefault();
-                    _vjsPlayer.currentTime(_vjsPlayer.currentTime() + 10);
-                    toast('⏩ +10 ثواني', 'info', 800);
-                } else if (e.code === 'ArrowLeft') {
-                    e.preventDefault();
-                    _vjsPlayer.currentTime(Math.max(0, _vjsPlayer.currentTime() - 10));
-                    toast('⏪ -10 ثواني', 'info', 800);
-                }
-            });
-        }
-
-        // ---- Public API ----
-        function open(courseId, courseTitle, videoUrl) {
-            const modal = document.getElementById('vp-modal');
-            const titleEl = document.getElementById('vp-title-el');
-            const skeleton = document.getElementById('vp-skeleton');
-            const container = document.getElementById('vp-vjs-container');
-            const controlsRow = document.getElementById('vp-controls');
-
-            // reset UI
-            if (titleEl) titleEl.textContent = courseTitle || 'مشاهدة الفيديو';
-            if (skeleton) { skeleton.style.display = 'flex'; skeleton.innerHTML = '<i class="fas fa-circle-play vp-skeleton-icon"></i><span>جاري تحميل الفيديو...</span>'; }
-            if (container) container.style.display = 'none';
-            if (controlsRow) controlsRow.classList.remove('show');
-
-            modal.classList.add('open');
-            document.body.style.overflow = 'hidden';
-
-            const videoId = _extractYTId(videoUrl);
-            if (!videoId) {
-                if (skeleton) skeleton.innerHTML = `<i class="fas fa-circle-exclamation" style="font-size:2.5rem;color:#ff5b5b;"></i>
-                    <span style="color:#e8edf5;font-weight:700;">لا يوجد فيديو لهذا الدرس</span>`;
-                return;
-            }
-
-            _buildPlayer(videoId);
-            setTimeout(_initWatermark, 1200);
-        }
-
-        function close() {
-            const modal = document.getElementById('vp-modal');
-            modal.classList.remove('open');
-            document.body.style.overflow = '';
-            _destroyPlayer();
-            _closeQuality();
-        }
-
-        function setSpeed(s) {
-            _speed = s;
-            if (_ready && _vjsPlayer) {
-                try { _vjsPlayer.playbackRate(s); } catch (e) {}
-            }
-            document.querySelectorAll('#vp-modal .spd-btn').forEach(btn => {
-                btn.classList.toggle('active', parseFloat(btn.textContent) === s);
-            });
-        }
-
-        function toggleQuality(e) {
-            e.stopPropagation();
-            _qOpen = !_qOpen;
-            const menu = document.getElementById('vp-q-menu');
-            const btn  = document.getElementById('vp-q-btn');
-            if (_qOpen && menu && btn) {
-                const r = btn.getBoundingClientRect();
-                let left = r.left;
-                if (window.innerWidth < 480) left = Math.max(10, Math.min(left, window.innerWidth - 160));
-                menu.style.left = left + 'px';
-                menu.style.top  = (r.top - (menu.offsetHeight || 200) - 10) + 'px';
-                menu.classList.add('open');
-            } else if (menu) {
-                menu.classList.remove('open');
-            }
-        }
-
-        // إغلاق quality menu عند الضغط خارجه
-        document.addEventListener('click', () => { if (_qOpen) _closeQuality(); });
-
-        _bindKeys();
-
-        return { open, close, setSpeed, toggleQuality };
-    })();
-    </script>
-
 </body>
 
 </html>
