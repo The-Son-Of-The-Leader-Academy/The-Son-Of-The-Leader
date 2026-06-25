@@ -2075,14 +2075,12 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(
-                110deg,
-                transparent 25%,
-                rgba(255, 215, 80, 0.12) 45%,
-                rgba(255, 230, 120, 0.2) 50%,
-                rgba(255, 215, 80, 0.12) 55%,
-                transparent 75%
-            );
+            background: linear-gradient(110deg,
+                    transparent 25%,
+                    rgba(255, 215, 80, 0.12) 45%,
+                    rgba(255, 230, 120, 0.2) 50%,
+                    rgba(255, 215, 80, 0.12) 55%,
+                    transparent 75%);
             background-size: 250% 100%;
             animation: shineSwipe 1.6s ease-in-out 3;
             pointer-events: none;
@@ -2091,15 +2089,35 @@
         }
 
         @keyframes highlightPulse {
-            0%, 100% { box-shadow: 0 0 0 2px rgba(245, 166, 35, 0.4), 0 6px 20px rgba(245, 166, 35, 0.12); }
-            50%       { box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.65), 0 8px 30px rgba(245, 166, 35, 0.22); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 2px rgba(245, 166, 35, 0.4), 0 6px 20px rgba(245, 166, 35, 0.12);
+            }
+
+            50% {
+                box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.65), 0 8px 30px rgba(245, 166, 35, 0.22);
+            }
         }
 
         @keyframes shineSwipe {
-            0%   { background-position: 220% center; opacity: 0; }
-            20%  { opacity: 1; }
-            80%  { opacity: 1; }
-            100% { background-position: -220% center; opacity: 0; }
+            0% {
+                background-position: 220% center;
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                background-position: -220% center;
+                opacity: 0;
+            }
         }
 
         .course-card.animate {
@@ -2321,15 +2339,26 @@
         }
 
         /* ── Balance Payment ── */
-        .pm-balance { background: linear-gradient(135deg,rgba(16,185,129,0.2),rgba(16,185,129,0.08)) !important; color: #10b981 !important; }
-        .pm-balance-btn { border-color: rgba(16,185,129,0.25) !important; }
-        .pm-balance-confirm-wrap { padding: 4px 0; }
+        .pm-balance {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.08)) !important;
+            color: #10b981 !important;
+        }
+
+        .pm-balance-btn {
+            border-color: rgba(16, 185, 129, 0.25) !important;
+        }
+
+        .pm-balance-confirm-wrap {
+            padding: 4px 0;
+        }
+
         .pm-balance-summary {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
             padding: 16px;
         }
+
         .pm-bal-row {
             display: flex;
             justify-content: space-between;
@@ -2338,9 +2367,10 @@
             font-size: 0.9rem;
             font-weight: 600;
         }
+
         .pm-bal-divider {
             height: 1px;
-            background: rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.08);
             margin: 6px 0;
         }
 
@@ -2486,8 +2516,8 @@
         }
 
         .pm-code {
-            background: linear-gradient(135deg, rgba(167,139,250,0.2), rgba(167,139,250,0.08));
-            border: 1px solid rgba(167,139,250,0.3);
+            background: linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(167, 139, 250, 0.08));
+            border: 1px solid rgba(167, 139, 250, 0.3);
             color: #a78bfa;
         }
 
@@ -2495,12 +2525,16 @@
             display: none;
             margin-top: 18px;
         }
-        .pm-code-input-wrap.active { display: block; }
+
+        .pm-code-input-wrap.active {
+            display: block;
+        }
+
         .pm-code-field {
             width: 100%;
             padding: 14px 18px;
-            background: rgba(167,139,250,0.06);
-            border: 1.5px solid rgba(167,139,250,0.3);
+            background: rgba(167, 139, 250, 0.06);
+            border: 1.5px solid rgba(167, 139, 250, 0.3);
             border-radius: var(--radius-md);
             color: var(--text-primary);
             font-family: monospace;
@@ -2512,11 +2546,18 @@
             outline: none;
             transition: var(--transition);
         }
+
         .pm-code-field:focus {
             border-color: #a78bfa;
-            box-shadow: 0 0 0 3px rgba(167,139,250,0.15);
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
         }
-        .pm-code-field::placeholder { letter-spacing: 1px; font-size: 0.9rem; font-family: Cairo, sans-serif; }
+
+        .pm-code-field::placeholder {
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            font-family: Cairo, sans-serif;
+        }
+
         .pm-code-activate-btn {
             width: 100%;
             margin-top: 12px;
@@ -2534,10 +2575,19 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            box-shadow: 0 6px 20px rgba(167,139,250,0.35);
+            box-shadow: 0 6px 20px rgba(167, 139, 250, 0.35);
         }
-        .pm-code-activate-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(167,139,250,0.5); }
-        .pm-code-activate-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .pm-code-activate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(167, 139, 250, 0.5);
+        }
+
+        .pm-code-activate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
 
         .pm-method-name {
             font-weight: 900;
@@ -3602,12 +3652,13 @@
         .avatar-picker-card {
             text-align: center;
         }
+
         .avatar-picker-circle {
             width: 110px;
             height: 110px;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(245,166,35,0.18), rgba(245,166,35,0.06));
-            border: 2.5px dashed rgba(245,166,35,0.45);
+            background: linear-gradient(135deg, rgba(245, 166, 35, 0.18), rgba(245, 166, 35, 0.06));
+            border: 2.5px dashed rgba(245, 166, 35, 0.45);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -3619,22 +3670,25 @@
             position: relative;
             overflow: hidden;
         }
+
         .avatar-picker-circle:hover {
             border-color: var(--primary);
-            box-shadow: 0 0 28px rgba(245,166,35,0.25);
+            box-shadow: 0 0 28px rgba(245, 166, 35, 0.25);
             transform: scale(1.04);
         }
+
         .avatar-picker-circle img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 50%;
         }
+
         .avatar-picker-circle .pick-overlay {
             position: absolute;
             inset: 0;
             border-radius: 50%;
-            background: rgba(0,0,0,0.45);
+            background: rgba(0, 0, 0, 0.45);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -3643,21 +3697,38 @@
             opacity: 0;
             transition: opacity 0.25s;
         }
-        .avatar-picker-circle:hover .pick-overlay { opacity: 1; }
-        .avatar-picker-circle .pick-overlay i { font-size: 1.2rem; color: #fff; }
-        .avatar-picker-circle .pick-overlay span { font-size: 0.65rem; color: #fff; font-weight: 700; }
+
+        .avatar-picker-circle:hover .pick-overlay {
+            opacity: 1;
+        }
+
+        .avatar-picker-circle .pick-overlay i {
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        .avatar-picker-circle .pick-overlay span {
+            font-size: 0.65rem;
+            color: #fff;
+            font-weight: 700;
+        }
+
         .avatar-picker-hint {
             color: var(--text-muted);
             font-size: 0.83rem;
             margin-bottom: 22px;
             line-height: 1.6;
         }
-        .avatar-picker-hint strong { color: var(--primary); }
+
+        .avatar-picker-hint strong {
+            color: var(--primary);
+        }
+
         .btn-skip {
             width: 100%;
             padding: 13px;
             background: transparent;
-            border: 1px solid rgba(245,166,35,0.25);
+            border: 1px solid rgba(245, 166, 35, 0.25);
             border-radius: var(--radius-md);
             color: var(--text-muted);
             font-family: Cairo, sans-serif;
@@ -3667,15 +3738,16 @@
             transition: var(--transition);
             margin-top: 10px;
         }
+
         .btn-skip:hover {
-            border-color: rgba(245,166,35,0.5);
+            border-color: rgba(245, 166, 35, 0.5);
             color: var(--text-secondary);
         }
     </style>
 
     <link rel="stylesheet" href="responsive-design.css">
     <script src="security-and-live.js" defer></script>
-    <!-- watchVideoFunction مدمجة في الأسفل -->
+    <script src="watchVideoFunction.js" defer></script>
 </head>
 
 <body>
@@ -3793,10 +3865,12 @@
                         <div class="pm-method-desc">أدخل كودك وفعّل فوراً</div>
                         <div class="pm-method-check"><i class="fas fa-check"></i></div>
                     </button>
-                    <button class="payment-method pm-balance-btn" onclick="selectPaymentMethod('balance', event)" id="pmBalanceBtn">
+                    <button class="payment-method pm-balance-btn" onclick="selectPaymentMethod('balance', event)"
+                        id="pmBalanceBtn">
                         <div class="pm-method-icon pm-balance"><i class="fas fa-wallet"></i></div>
                         <div class="pm-method-name">الدفع من الرصيد</div>
-                        <div class="pm-method-desc" id="pmBalanceDesc">رصيدك الحالي: <span id="pmBalanceAmount">0</span> ج.م</div>
+                        <div class="pm-method-desc" id="pmBalanceDesc">رصيدك الحالي: <span id="pmBalanceAmount">0</span>
+                            ج.م</div>
                         <div class="pm-method-check"><i class="fas fa-check"></i></div>
                     </button>
                 </div>
@@ -3820,15 +3894,18 @@
                     </div>
                     <div class="pm-bal-divider"></div>
                     <div class="pm-bal-row">
-                        <span><i class="fas fa-coins" style="color:#60a5fa;margin-left:6px"></i> الرصيد بعد الشراء</span>
+                        <span><i class="fas fa-coins" style="color:#60a5fa;margin-left:6px"></i> الرصيد بعد
+                            الشراء</span>
                         <span id="pmBalAfter" style="font-weight:800;color:#60a5fa">—</span>
                     </div>
                 </div>
-                <div id="pmBalInsufficientMsg" style="display:none;background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.3);border-radius:10px;padding:12px 16px;margin-top:12px;color:#ff4757;font-weight:700;font-size:0.88rem;text-align:center">
+                <div id="pmBalInsufficientMsg"
+                    style="display:none;background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.3);border-radius:10px;padding:12px 16px;margin-top:12px;color:#ff4757;font-weight:700;font-size:0.88rem;text-align:center">
                     <i class="fas fa-exclamation-triangle" style="margin-left:6px"></i>
                     رصيدك غير كافٍ لشراء هذا الكورس
                 </div>
-                <button type="button" class="pm-submit-btn" id="pmBalancePayBtn" onclick="StudentApp.actions.payWithBalance()" style="margin-top:16px">
+                <button type="button" class="pm-submit-btn" id="pmBalancePayBtn"
+                    onclick="StudentApp.actions.payWithBalance()" style="margin-top:16px">
                     <i class="fas fa-bolt"></i>
                     <span>تأكيد الدفع وتفعيل الكورس فوراً</span>
                     <div class="pm-submit-arrow"><i class="fas fa-arrow-left"></i></div>
@@ -3842,10 +3919,10 @@
             <!-- كود الدفع — يظهر لما يختار code -->
             <div class="pm-code-input-wrap" id="pmCodeInputWrap">
                 <div class="pm-step-label" style="margin-bottom:10px"><span>🎟</span> أدخل كود الدفع</div>
-                <input type="text" id="pmCodeField" class="pm-code-field"
-                    placeholder="أدخل الكود هنا..."
+                <input type="text" id="pmCodeField" class="pm-code-field" placeholder="أدخل الكود هنا..."
                     oninput="this.value=this.value.toUpperCase().replace(/\s/g,'')">
-                <button type="button" class="pm-code-activate-btn" id="pmCodeActivateBtn" onclick="StudentApp.actions.activateCode()">
+                <button type="button" class="pm-code-activate-btn" id="pmCodeActivateBtn"
+                    onclick="StudentApp.actions.activateCode()">
                     <i class="fas fa-bolt"></i> تفعيل فوري
                 </button>
             </div>
@@ -3983,10 +4060,10 @@
             <div class="logo-box"><i class="fas fa-graduation-cap"></i></div>
             <h2 style="color: var(--primary); margin-bottom: 20px;">حدد صفك الدراسي</h2>
             <div style="display: grid; gap: 15px;">
-                <button type="button" class="btn-action" onclick="selectGrade('1 بكالوريا')"
+                <button type="button" class="btn-action" onclick="selectGrade('grade_1')"
                     style="background: linear-gradient(135deg, #3b82f6, #2563eb);"><i class="fas fa-book"></i> 1
                     بكالوريا</button>
-                <button type="button" class="btn-action" onclick="selectGrade('2 بكالوريا')"
+                <button type="button" class="btn-action" onclick="selectGrade('grade_2')"
                     style="background: linear-gradient(135deg, #fbbf24, #d97706);"><i class="fas fa-book"></i> 2
                     بكالوريا</button>
             </div>
@@ -4007,9 +4084,10 @@
                     <span>اختر صورة</span>
                 </div>
             </div>
-            <input type="file" id="avatarPickerInput" accept="image/jpeg,image/png,image/webp"
-                style="display:none;" onchange="handlePickerAvatar(this)">
-            <p id="avatarPickerStatus" style="font-size:0.82rem;color:var(--success);margin-bottom:14px;min-height:20px;"></p>
+            <input type="file" id="avatarPickerInput" accept="image/jpeg,image/png,image/webp" style="display:none;"
+                onchange="handlePickerAvatar(this)">
+            <p id="avatarPickerStatus"
+                style="font-size:0.82rem;color:var(--success);margin-bottom:14px;min-height:20px;"></p>
             <button class="btn-action" id="avatarPickerSaveBtn" onclick="finishAvatarPicker()" style="display:none;">
                 <i class="fas fa-check"></i> حفظ وابدأ
             </button>
@@ -4040,7 +4118,8 @@
                 <div class="user-name" id="profileUserName">مستخدم</div>
                 <div class="user-grade" id="profileUserGrade">لم يتم تحديد صف</div>
                 <!-- Balance Display -->
-                <div id="profileBalanceBox" style="display:flex;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,rgba(16,185,129,0.12),rgba(16,185,129,0.06));border:1px solid rgba(16,185,129,0.25);border-radius:12px;padding:8px 16px;margin:8px 0 4px;cursor:default;transition:all 0.2s">
+                <div id="profileBalanceBox"
+                    style="display:flex;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,rgba(16,185,129,0.12),rgba(16,185,129,0.06));border:1px solid rgba(16,185,129,0.25);border-radius:12px;padding:8px 16px;margin:8px 0 4px;cursor:default;transition:all 0.2s">
                     <i class="fas fa-wallet" style="color:#10b981;font-size:0.9rem"></i>
                     <span style="color:#10b981;font-weight:700;font-size:0.95rem" id="profileBalanceVal">0</span>
                     <span style="color:rgba(16,185,129,0.7);font-size:0.78rem;font-weight:600">ج.م رصيد</span>
@@ -4188,7 +4267,7 @@
                     if (error || !data) return;
                     this._index = data.map(c => {
                         let type = 'كورس', icon = 'fas fa-play-circle', tab = 'courses';
-                        if (c.type === 'pdf')      { type = 'مذكرة PDF'; icon = 'fas fa-file-pdf'; tab = 'notes'; }
+                        if (c.type === 'pdf') { type = 'مذكرة PDF'; icon = 'fas fa-file-pdf'; tab = 'notes'; }
                         else if (c.type === 'playlist') { type = 'قائمة تشغيل'; icon = 'fas fa-list'; tab = 'playlists'; }
                         return {
                             id: c.id,
@@ -4200,7 +4279,7 @@
                         };
                     }).filter(c => c.title);
                     this._loaded = true;
-                } catch(e) { console.error('[Search] buildIndex error:', e); }
+                } catch (e) { console.error('[Search] buildIndex error:', e); }
                 finally { this._loading = false; }
             },
 
@@ -4211,7 +4290,7 @@
             },
 
             async _doSearch(rawQuery) {
-                const box  = document.getElementById('searchResults');
+                const box = document.getElementById('searchResults');
                 const clearBtn = document.getElementById('clearSearchBtn');
                 const q = (rawQuery || '').trim();
 
@@ -4237,8 +4316,8 @@
                     const haystack = [item.title, item.description, item.instructor].join(' ').toLowerCase();
                     let score = 0;
                     for (const t of terms) {
-                        if (item.title.toLowerCase().includes(t))       score += 10;
-                        if (item.instructor.toLowerCase().includes(t))  score += 5;
+                        if (item.title.toLowerCase().includes(t)) score += 10;
+                        if (item.instructor.toLowerCase().includes(t)) score += 5;
                         if (item.description.toLowerCase().includes(t)) score += 2;
                     }
                     return { ...item, score };
@@ -4330,13 +4409,14 @@
 
         const StudentApp = {
             config: {
-                supabaseUrl: "https://mlakfrkzywppqflsmees.supabase.co",
-                supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sYWtmcmt6eXdwcHFmbHNtZWVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODE0NTEsImV4cCI6MjA4OTE1NzQ1MX0.nKxhhEsehh9cacNaKf0qwNBvgJQp_ugLXmpQkamsC6s"
+                supabaseUrl: "https://yxhajhwdbsxblbcpjtci.supabase.co",
+                supabaseKey: "sb_publishable_yGLQXnUVYejPs83WF3wiPA_a3VvpsZx"
             },
             client: null,
             state: {
                 currentUser: null,
                 purchasedIds: [],
+                playlistChildIds: [],
                 openPlaylistId: null,
                 directPurchasedIds: [],
                 pendingIds: [],
@@ -4525,17 +4605,27 @@
                         if (!button || button.disabled) return;
                         const { courseId, courseType, pdfUrl, title, price, isFree } = card.dataset;
                         const insidePlaylist = containerId === 'playlistItemsContainer';
-                        // جوا البلاي ليست: لو الكورس مجاني يفتح، لو مدفوع لازم يكون مشترك فيه
                         const courseIsFree = isFree === 'true' || parseFloat(price) === 0;
-                        const isSubscribed = StudentApp.state.purchasedIds.includes(courseId) || (insidePlaylist && courseIsFree);
-                        const isPending = StudentApp.state.pendingIds.includes(courseId);
+                        const openPlaylistId = StudentApp.state.openPlaylistId;
+                        // لو جوه playlist والـ playlist مشترك فيها → كل الكورسات تتفتح مباشرة
+                        const playlistOwned = insidePlaylist && openPlaylistId && StudentApp.state.purchasedIds.includes(openPlaylistId);
+                        const isSubscribed = StudentApp.state.purchasedIds.includes(courseId) || courseIsFree || playlistOwned;
+                        const isPending = !isSubscribed && StudentApp.state.pendingIds.includes(courseId);
                         if (isSubscribed) {
-                            // جيب video_url من courses مباشرة (مش courses_public اللي مش فيها الرابط)
                             if (courseType === 'video') {
-                                StudentApp.client.from('courses').select('video_url').eq('id', courseId).single().then(({ data }) => {
-                                    if (!data || !data.video_url) { alert('عذراً، لا يوجد فيديو متاح لهذا الدرس.'); return; }
-                                    watchVideo(courseId, title, data.video_url);
-                                });
+                                // ✅ استخدام video_url المحفوظ في الكارد مباشرة بدون query جديد
+                                const _unmask = (s) => {
+                                    try {
+                                        if (!s) return '';
+                                        if (s.startsWith('http')) return s;
+                                        const reversed = s.split('').reverse().join('');
+                                        return decodeURIComponent(escape(atob(reversed)));
+                                    } catch (e) { return s; }
+                                };
+                                const maskedUrl = card.dataset.videoUrl || '';
+                                const videoUrl = _unmask(maskedUrl);
+                                if (!videoUrl) { alert('عذراً، لا يوجد فيديو متاح لهذا الدرس.'); return; }
+                                watchVideo(courseId, title, videoUrl);
                             }
                             else if (courseType === 'pdf') StudentApp.actions.downloadPDF(pdfUrl);
                             else if (courseType === 'playlist') StudentApp.actions.openPlaylist(courseId, title, null);
@@ -4599,11 +4689,11 @@
                         const approved = purchases.filter(p => p.status === 'approved');
                         const directIds = approved.map(p => p.course_id);
                         StudentApp.state.directPurchasedIds = directIds;
-                        // ✅ نجيب بيانات الـ playlists المشتراة من courses_public
+                        // جيب كورسات الـ playlists المشتراة من جدول courses (فيه video_url)
                         let fromPlaylists = [];
                         if (directIds.length > 0) {
                             const { data: playlistCourses } = await StudentApp.client
-                                .from('courses_public').select('id, type, video_url').in('id', directIds).eq('type', 'playlist');
+                                .from('courses').select('id, type, video_url').in('id', directIds).eq('type', 'playlist');
                             if (playlistCourses) {
                                 playlistCourses.forEach(p => {
                                     if (p.video_url) {
@@ -4613,7 +4703,10 @@
                                 });
                             }
                         }
+                        // purchasedIds = المشتريات المباشرة + كورسات الـ playlists المشتراة
+                        // (كورسات الـ playlist تتفتح في كل التابس لأن الطالب اشترى القائمة كاملة)
                         StudentApp.state.purchasedIds = Array.from(new Set([...directIds, ...fromPlaylists]));
+                        StudentApp.state.playlistChildIds = Array.from(new Set([...fromPlaylists]));
                         StudentApp.state.pendingIds = purchases.filter(p => p.status === 'pending').map(p => p.course_id);
                     }
                 },
@@ -4638,12 +4731,17 @@
                     }
                     const courseIds = purchases.map(p => p.course_id);
                     const { data: courses, error: cErr } = await StudentApp.client
-                        .from('courses_public').select('*').in('id', courseIds);
+                        .from('courses').select('*').in('id', courseIds);
                     if (cErr || !courses || !courses.length) {
                         container.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-cart"></i><p>لا توجد اشتراكات نشطة</p></div>';
                         return;
                     }
-                    container.innerHTML = courses.map(c => StudentApp.ui.createCourseCard(c, true, false)).join('');
+                    // ✅ إصلاح 1: فلترة اشتراكاتي بالـ grade الحالي
+                    const currentGrade = (StudentApp.state.currentUser?.grade || '').trim();
+                    const filteredPurchases = currentGrade
+                        ? courses.filter(c => !c.grade || c.grade === currentGrade)
+                        : courses;
+                    container.innerHTML = filteredPurchases.map(c => StudentApp.ui.createCourseCard(c, true, false)).join('');
                 },
 
                 renderContent: async function (containerId, type) {
@@ -4664,10 +4762,22 @@
                         container.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><p>${msgs[type]}</p></div>`;
                         return;
                     }
+                    // ✅ FIX: جيب video_url و pdf_url من جدول courses الحقيقي لأن courses_public مش فيها
+                    const allIds = data.map(d => d.id);
+                    let privateMap = {};
+                    if (allIds.length > 0) {
+                        const { data: privateData } = await StudentApp.client
+                            .from('courses').select('id, video_url, pdf_url').in('id', allIds);
+                        if (privateData) {
+                            privateData.forEach(p => { privateMap[p.id] = p; });
+                        }
+                    }
                     container.innerHTML = data.map(item => {
                         const isSubscribed = StudentApp.state.purchasedIds.includes(item.id);
                         const isPending = StudentApp.state.pendingIds.includes(item.id);
-                        return StudentApp.ui.createCourseCard(item, isSubscribed, isPending);
+                        // دمج video_url و pdf_url من جدول courses مع بيانات courses_public
+                        const enriched = { ...item, video_url: privateMap[item.id]?.video_url || null, pdf_url: privateMap[item.id]?.pdf_url || null };
+                        return StudentApp.ui.createCourseCard(enriched, isSubscribed, isPending);
                     }).join('');
                 },
             },
@@ -5039,6 +5149,56 @@
                     subscribeUpdate();
 
                     // ═══════════════════════════════════════════════════
+                    // ✅ إصلاح 2: قناة INSERT — طلبات الشراء الجديدة فورية
+                    // ═══════════════════════════════════════════════════
+                    const insertName = self._channelName('purchases-insert', studentId);
+                    const subscribeInsert = () => {
+                        console.log(`[realtime] 💳 تفعيل قناة INSERT: ${insertName}`);
+                        const ch = StudentApp.client
+                            .channel(insertName)
+                            .on('postgres_changes', {
+                                event: 'INSERT',
+                                schema: 'public',
+                                table: 'purchases',
+                                filter: `student_id=eq.${studentId}`
+                            }, async (payload) => {
+                                const newStatus = payload.new?.status;
+                                console.log(`[realtime] 💳 INSERT وصل — status: ${newStatus}`);
+                                const { data: { session } } = await StudentApp.client.auth.getSession();
+                                if (!session) return;
+                                if (newStatus === 'approved') {
+                                    try {
+                                        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                                        const o = ctx.createOscillator(), g = ctx.createGain();
+                                        o.connect(g); g.connect(ctx.destination);
+                                        o.frequency.setValueAtTime(880, ctx.currentTime);
+                                        o.frequency.setValueAtTime(1100, ctx.currentTime + 0.12);
+                                        g.gain.setValueAtTime(0.3, ctx.currentTime);
+                                        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+                                        o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.4);
+                                    } catch (_) { }
+                                    StudentApp.ui.showAlert('🎉 تم تفعيل اشتراكك مباشرة!', 'success');
+                                } else if (newStatus === 'pending') {
+                                    StudentApp.ui.showAlert('⏳ تم استلام طلبك، في انتظار المراجعة', 'info');
+                                }
+                                await StudentApp.data.loadInitialData();
+                                const activeTab = document.querySelector('.tab-btn.active')
+                                    ?.getAttribute('onclick')?.match(/switchTab\('(\w+)'\)/)?.[1];
+                                if (activeTab) await StudentApp.data[`load${activeTab.charAt(0).toUpperCase()}${activeTab.slice(1)}`]?.();
+                                StudentApp.data.loadPurchases();
+                            })
+                            .subscribe((status, err) => {
+                                console.log(`[realtime] قناة INSERT — الحالة: ${status}`);
+                                if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+                                    try { StudentApp.client.removeChannel(ch); } catch (_) { }
+                                    self._reconnect(() => subscribeInsert(), 'purchases-insert');
+                                }
+                            });
+                        self._channels.push(ch);
+                    };
+                    subscribeInsert();
+
+                    // ═══════════════════════════════════════════════════
                     // قناة 2: DELETE عبر Broadcast
                     // الـ Admin بيبعت broadcast قبل الحذف بـ course_id
                     // ═══════════════════════════════════════════════════
@@ -5069,6 +5229,26 @@
                     console.log(`[realtime] 🗑️ تنفيذ حذف: course_id=${deletedCourseId}`);
                     StudentApp.state.purchasedIds = StudentApp.state.purchasedIds.filter(id => id !== deletedCourseId);
                     StudentApp.state.pendingIds = StudentApp.state.pendingIds.filter(id => id !== deletedCourseId);
+                    if (StudentApp.state.directPurchasedIds) {
+                        StudentApp.state.directPurchasedIds = StudentApp.state.directPurchasedIds.filter(id => id !== deletedCourseId);
+                    }
+                    // إعادة بناء playlistChildIds وpurchasedIds من الـ playlists المتبقية
+                    (async () => {
+                        const remainingPlaylistIds = (StudentApp.state.directPurchasedIds || []);
+                        if (remainingPlaylistIds.length > 0) {
+                            const { data: pls } = await StudentApp.client
+                                .from('courses').select('id, type, video_url').in('id', remainingPlaylistIds).eq('type', 'playlist');
+                            let childIds = [];
+                            if (pls) pls.forEach(p => {
+                                try { const ids = JSON.parse(p.video_url || '[]'); if (Array.isArray(ids)) childIds.push(...ids); } catch (_) { }
+                            });
+                            StudentApp.state.playlistChildIds = Array.from(new Set(childIds));
+                            StudentApp.state.purchasedIds = Array.from(new Set([...remainingPlaylistIds, ...childIds]));
+                        } else {
+                            StudentApp.state.playlistChildIds = [];
+                            StudentApp.state.purchasedIds = [];
+                        }
+                    })();
                     const purchaseCard = document.querySelector(`#purchasesList [data-course-id="${deletedCourseId}"]`);
                     if (purchaseCard) {
                         purchaseCard.style.transition = 'opacity 0.3s, transform 0.3s';
@@ -5186,29 +5366,7 @@
                     if (error) { StudentApp.ui.showAlert('خطأ في حفظ الصف', 'error'); return; }
                     StudentApp.state.currentUser.grade = grade;
                     localStorage.setItem('leader_grade', grade);
-
-                    // ✅ نعيد فلترة purchasedIds على الصف الجديد بس
-                    const { data: gradeCoursesRaw } = await StudentApp.client
-                        .from('courses_public').select('id').eq('grade', grade);
-                    const gradeCourseIds = new Set((gradeCoursesRaw || []).map(c => c.id));
-                    const allDirectIds = StudentApp.state.directPurchasedIds || [];
-                    const filteredDirectIds = allDirectIds.filter(id => gradeCourseIds.has(id));
-                    let fromPlaylists = [];
-                    if (filteredDirectIds.length > 0) {
-                        const { data: playlistCourses } = await StudentApp.client
-                            .from('courses_public').select('id, type, video_url').in('id', filteredDirectIds).eq('type', 'playlist');
-                        if (playlistCourses) {
-                            playlistCourses.forEach(p => {
-                                if (p.video_url) {
-                                    try { const ids = JSON.parse(p.video_url); if (Array.isArray(ids)) fromPlaylists.push(...ids); }
-                                    catch (e) {}
-                                }
-                            });
-                        }
-                    }
-                    StudentApp.state.purchasedIds = Array.from(new Set([...filteredDirectIds, ...fromPlaylists]));
-
-                    GlobalSearch.invalidate();
+                    GlobalSearch.invalidate(); // أعد بناء الـ index للصف الجديد
                     GlobalSearch.buildIndex();
                     StudentApp.ui.showAlert(`✅ تم تحديث الصف إلى: ${grade}`, 'success');
                     // لو مفيش avatar — اعرض شاشة اختيار الصورة
@@ -5274,12 +5432,23 @@
                         StudentApp.state.selectedPaymentMethod = null;
                         document.getElementById('paymentModal').classList.add('active');
                     } else {
-                        StudentApp.client.from('courses').select('video_url, pdf_url').eq('id', courseId).single().then(({ data }) => {
-                            if (!data) return;
-                            if (type === 'pdf') StudentApp.actions.downloadPDF(data.pdf_url);
-                            else if (type === 'playlist') StudentApp.actions.openPlaylist(courseId, title, data.video_url);
-                            else watchVideo(courseId, title, data.video_url);
-                        });
+                        // ✅ استخدام video_url من الكارد مباشرة بدون query
+                        const _unmask = (s) => {
+                            try {
+                                if (!s) return '';
+                                if (s.startsWith('http')) return s;
+                                const reversed = s.split('').reverse().join('');
+                                return decodeURIComponent(escape(atob(reversed)));
+                            } catch (e) { return s; }
+                        };
+                        const card = document.querySelector(`.course-card[data-course-id="${courseId}"]`);
+                        const maskedUrl = card ? card.dataset.videoUrl : '';
+                        const maskedPdf = card ? card.dataset.pdfUrl : '';
+                        const videoUrl = _unmask(maskedUrl);
+                        const pdfUrl = maskedPdf;
+                        if (type === 'pdf') StudentApp.actions.downloadPDF(pdfUrl);
+                        else if (type === 'playlist') StudentApp.actions.openPlaylist(courseId, title, videoUrl);
+                        else watchVideo(courseId, title, videoUrl);
                     }
                 },
 
@@ -5328,7 +5497,7 @@
                     if (!currentUser || !currentCourse) { StudentApp.ui.showAlert('خطأ في البيانات', 'error'); return; }
 
                     const price = parseFloat(currentCourse.price) || 0;
-                    const bal   = parseFloat(currentUser.balance)  || 0;
+                    const bal = parseFloat(currentUser.balance) || 0;
 
                     if (bal < price) {
                         StudentApp.ui.showAlert('رصيدك غير كافٍ لإتمام هذه العملية', 'error');
@@ -5340,49 +5509,45 @@
                     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>جاري التفعيل...</span>';
 
                     try {
-                        const newBalance = parseFloat((bal - price).toFixed(2));
+                        // ✅ استدعاء RPC server-side — الخصم والـ purchase يتعملوا في DB بأمان
+                        const { data: result, error: rpcErr } = await StudentApp.client
+                            .rpc('buy_with_balance', { p_course_id: currentCourse.id });
 
-                        // 1️⃣ خصم الرصيد من الطالب
-                        const { error: balErr } = await StudentApp.client
-                            .from('students')
-                            .update({ balance: newBalance })
-                            .eq('id', currentUser.id);
-                        if (balErr) throw balErr;
+                        if (rpcErr) throw rpcErr;
+                        if (!result?.success) throw new Error(result?.error || 'فشل الشراء');
 
-                        // 2️⃣ إنشاء purchase بـ status=approved مباشرة (بدون pending)
-                        const { error: purchErr } = await StudentApp.client
-                            .from('purchases')
-                            .upsert([{
-                                student_id:     currentUser.id,
-                                course_id:      currentCourse.id,
-                                payment_method: 'balance',
-                                sender_info:    'دفع بالرصيد',
-                                payment_image:  'balance_payment',
-                                notes:          '',
-                                status:         'approved',
-                                reviewed_at:    new Date().toISOString()
-                            }], { onConflict: 'student_id,course_id' });
-                        if (purchErr) throw purchErr;
+                        const newBalance = parseFloat(result.new_balance ?? (bal - price)).toFixed(2);
 
-                        // 3️⃣ تحديث الـ state فوراً
+                        // تحديث الـ state فوراً
                         currentUser.balance = newBalance;
-                        StudentApp.state.currentUser.balance = newBalance;
+                        StudentApp.state.currentUser.balance = parseFloat(newBalance);
                         if (!StudentApp.state.purchasedIds.includes(currentCourse.id))
                             StudentApp.state.purchasedIds.push(currentCourse.id);
                         if (!StudentApp.state.directPurchasedIds?.includes(currentCourse.id))
                             StudentApp.state.directPurchasedIds?.push(currentCourse.id);
                         StudentApp.state.pendingIds = StudentApp.state.pendingIds.filter(id => id !== currentCourse.id);
+                        // لو الكورس playlist → أضف كورساتها لـ purchasedIds فوراً
+                        if (currentCourse.type === 'playlist' && currentCourse.video_url) {
+                            try {
+                                const childIds = JSON.parse(currentCourse.video_url);
+                                if (Array.isArray(childIds)) {
+                                    childIds.forEach(cid => {
+                                        if (!StudentApp.state.playlistChildIds.includes(cid)) StudentApp.state.playlistChildIds.push(cid);
+                                        if (!StudentApp.state.purchasedIds.includes(cid)) StudentApp.state.purchasedIds.push(cid);
+                                    });
+                                }
+                            } catch (_) { }
+                        }
 
-                        // 4️⃣ تحديث ظهور الرصيد في الـ header فوراً
-                        const balDisplayEl = document.querySelector('[id*="balance"], .balance-display, #userBalance');
-                        if (balDisplayEl) balDisplayEl.textContent = newBalance.toFixed(2);
-                        // محاولة تحديث أي عنصر بيعرض الرصيد
+                        // تحديث عرض الرصيد في الـ UI فوراً
+                        const balEl = document.getElementById('profileBalanceVal');
+                        if (balEl) balEl.textContent = parseFloat(newBalance).toFixed(2);
                         document.querySelectorAll('.balance-val, #balanceVal, .user-balance').forEach(el => {
-                            el.textContent = newBalance.toFixed(2);
+                            el.textContent = parseFloat(newBalance).toFixed(2);
                         });
 
-                        // 5️⃣ تحديث زرار الكارد فوراً
-                        ['coursesList','notesList','playlistsList'].forEach(listId => {
+                        // تحديث زرار الكارد فوراً
+                        ['coursesList', 'notesList', 'playlistsList'].forEach(listId => {
                             const card = document.querySelector(`#${listId} [data-course-id="${currentCourse.id}"]`);
                             if (card) {
                                 const btn2 = card.querySelector('button');
@@ -5390,14 +5555,14 @@
                                     btn2.disabled = false;
                                     btn2.className = 'course-button';
                                     const ct = card.dataset.courseType;
-                                    btn2.innerHTML = ct === 'pdf'      ? '<i class="fas fa-download"></i> تحميل ملف PDF'
-                                                   : ct === 'playlist' ? '<i class="fas fa-folder-open"></i> تصفح القائمة'
-                                                   : '<i class="fas fa-play"></i> شاهد الدرس';
+                                    btn2.innerHTML = ct === 'pdf' ? '<i class="fas fa-download"></i> تحميل ملف PDF'
+                                        : ct === 'playlist' ? '<i class="fas fa-folder-open"></i> تصفح القائمة'
+                                            : '<i class="fas fa-play"></i> شاهد الدرس';
                                 }
                             }
                         });
 
-                        StudentApp.ui.showAlert('🎉 تم تفعيل الكورس بنجاح! تم خصم ' + price + ' ج.م من رصيدك', 'success');
+                        StudentApp.ui.showAlert(result.message || '🎉 تم تفعيل الكورس بنجاح!', 'success');
                         setTimeout(() => StudentApp.ui.closePaymentModal(), 1200);
 
                     } catch (err) {
@@ -5434,7 +5599,7 @@
                             return;
                         }
 
-                        // ✅ حدّث الـ state فوراً
+                        // حدّث الـ state فوراً
                         if (!StudentApp.state.purchasedIds.includes(currentCourse.id)) {
                             StudentApp.state.purchasedIds.push(currentCourse.id);
                         }
@@ -5443,9 +5608,21 @@
                         }
                         // أزله من pendingIds لو كان فيها
                         StudentApp.state.pendingIds = StudentApp.state.pendingIds.filter(id => id !== currentCourse.id);
+                        // لو الكورس playlist → أضف كورساتها لـ purchasedIds فوراً
+                        if (currentCourse.type === 'playlist' && currentCourse.video_url) {
+                            try {
+                                const childIds = JSON.parse(currentCourse.video_url);
+                                if (Array.isArray(childIds)) {
+                                    childIds.forEach(cid => {
+                                        if (!StudentApp.state.playlistChildIds.includes(cid)) StudentApp.state.playlistChildIds.push(cid);
+                                        if (!StudentApp.state.purchasedIds.includes(cid)) StudentApp.state.purchasedIds.push(cid);
+                                    });
+                                }
+                            } catch (_) { }
+                        }
 
                         // ✅ حدّث زرار الكارد فوراً
-                        ['coursesList','notesList','playlistsList'].forEach(listId => {
+                        ['coursesList', 'notesList', 'playlistsList'].forEach(listId => {
                             const card = document.querySelector(`#${listId} [data-course-id="${currentCourse.id}"]`);
                             if (card) {
                                 const btn2 = card.querySelector('button');
@@ -5455,7 +5632,7 @@
                                     const ct = card.dataset.courseType;
                                     btn2.innerHTML = ct === 'pdf' ? '<i class="fas fa-download"></i> تحميل ملف PDF'
                                         : ct === 'playlist' ? '<i class="fas fa-folder-open"></i> تصفح القائمة'
-                                        : '<i class="fas fa-play"></i> شاهد الدرس';
+                                            : '<i class="fas fa-play"></i> شاهد الدرس';
                                 }
                             }
                         });
@@ -5516,18 +5693,18 @@
                             return;
                         }
 
-                        // رفع الإيصال
+                        // رفع الإيصال على bucket منفصل للإيصالات (مش materials اللي بقى private)
                         const cleanFileName = transferImage.name.replace(/[^a-zA-Z0-9.]/g, '_');
                         const fileName = `payments/${currentUser.id}/${Date.now()}_${cleanFileName}`;
                         console.log(`[payment] 📤 رفع الإيصال: ${fileName}`);
 
                         const { error: uploadError } = await StudentApp.client.storage
-                            .from('materials')
+                            .from('avatars')
                             .upload(fileName, transferImage);
                         if (uploadError) throw uploadError;
 
                         const { data: publicData } = StudentApp.client.storage
-                            .from('materials')
+                            .from('avatars')
                             .getPublicUrl(fileName);
 
                         // ✅ FIX #6 — upsert بدل insert لتجنب 23505 نهائياً
@@ -5650,11 +5827,16 @@
                         }
                         container.innerHTML = ordered.map(c => {
                             const cIsFree = c.is_free === true || !c.price || c.price == 0;
-                            const cSubscribed = cIsFree || StudentApp.state.purchasedIds.includes(c.id);
+                            // ✅ FIX: نتحقق من اشتراك الـ playlist وقت الرسم مباشرة
+                            const playlistSubscribed = StudentApp.state.purchasedIds.includes(playlistId);
+                            const cSubscribed = cIsFree || playlistSubscribed || StudentApp.state.purchasedIds.includes(c.id);
                             const cPending = !cSubscribed && StudentApp.state.pendingIds.includes(c.id);
                             return StudentApp.ui.createCourseCard(c, cSubscribed, cPending);
                         }).join('');
                         // ربط أحداث الكارد بعد الرسم
+                        // ✅ FIX: نمسح _leaderBound عشان يعيد ربط الأحداث بعد إعادة رسم الـ container
+                        const pc = document.getElementById('playlistItemsContainer');
+                        if (pc) pc._leaderBound = false;
                         StudentApp.ui.bindCardEvents('playlistItemsContainer');
                     } catch (err) {
                         console.error(err);
@@ -5717,10 +5899,16 @@
             }
         });
 
+        // تحويل قيمة ENUM للصف إلى نص عربي مقروء
+        function gradeLabel(grade) {
+            const map = { grade_1: '1 بكالوريا', grade_2: '2 بكالوريا', grade_3: '3 بكالوريا' };
+            return map[grade] || grade || 'لم يتم تحديد صف';
+        }
+
         function updateProfileInfo(name, grade, balance) {
             const displayName = (name || 'طالب').split(' ')[0];
             document.getElementById('profileUserName').innerText = `أهلا بك يا ${displayName} 👋`;
-            document.getElementById('profileUserGrade').innerText = `الصف: ${grade || 'لم يتم تحديد صف'}`;
+            document.getElementById('profileUserGrade').innerText = `الصف: ${gradeLabel(grade)}`;
             // update balance display
             const bal = (balance !== undefined && balance !== null) ? parseFloat(balance) : (StudentApp?.state?.currentUser?.balance || 0);
             const balEl = document.getElementById('profileBalanceVal');
@@ -5784,9 +5972,11 @@
             // if no DB field yet, try fetching from storage
             if (!url) {
                 try {
+                    // ✅ FIX: استخدم user_id (= auth.uid) مش student.id عشان path الـ storage صح
+                    const authUid = student.user_id || (await StudentApp.client.auth.getUser()).data?.user?.id;
                     const { data } = StudentApp.client.storage
                         .from('avatars')
-                        .getPublicUrl(`${student.id}/avatar`);
+                        .getPublicUrl(`${authUid}/avatar`);
                     if (data?.publicUrl) {
                         // ping to check if file actually exists
                         const res = await fetch(data.publicUrl, { method: 'HEAD' });
@@ -5823,7 +6013,9 @@
                 console.log('[Avatar] compressed size:', compressed.size, 'type:', compressed.type);
 
                 // 2. upload — upsert:true يستبدل الملف القديم تلقائياً
-                const filePath = `${student.id}/avatar`;
+                // ✅ FIX: استخدم user_id (= auth.uid) مش student.id عشان الـ RLS policy تقبل الرفع
+                const authUid = student.user_id || (await StudentApp.client.auth.getUser()).data?.user?.id;
+                const filePath = `${authUid}/avatar`;
                 const { data: upData, error: upErr } = await StudentApp.client.storage
                     .from('avatars')
                     .upload(filePath, compressed, {
@@ -5855,13 +6047,11 @@
                 const finalUrl = urlData.publicUrl + '?t=' + Date.now();
                 console.log('[Avatar] public url:', finalUrl);
 
-                // 4. save URL to DB — match by user_id (safer than row id)
+                // 4. save URL to DB — match by user_id
                 const { error: dbErr } = await StudentApp.client
                     .from('students')
                     .update({ avatar_url: urlData.publicUrl })
-                    .eq('user_id', StudentApp.client.auth.getUser
-                        ? (await StudentApp.client.auth.getUser()).data?.user?.id
-                        : student.user_id);
+                    .eq('user_id', authUid);
 
                 if (dbErr) {
                     console.error('[Avatar] db update error:', dbErr);
@@ -5980,12 +6170,14 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الرفع...';
             const student = StudentApp.state.currentUser;
             try {
-                const filePath = `${student.id}/avatar`;
+                // ✅ FIX: استخدم user_id (= auth.uid) مش student.id عشان الـ RLS policy تقبل الرفع
+                const authUid = student.user_id || (await StudentApp.client.auth.getUser()).data?.user?.id;
+                const filePath = `${authUid}/avatar`;
                 const { error: upErr } = await StudentApp.client.storage.from('avatars').upload(filePath, _pickerBlob, { cacheControl: '1', upsert: true, contentType: 'image/jpeg' });
                 if (upErr) throw upErr;
                 const { data: urlData } = StudentApp.client.storage.from('avatars').getPublicUrl(filePath);
                 const finalUrl = urlData.publicUrl + '?t=' + Date.now();
-                await StudentApp.client.from('students').update({ avatar_url: urlData.publicUrl }).eq('id', student.id);
+                await StudentApp.client.from('students').update({ avatar_url: urlData.publicUrl }).eq('user_id', authUid);
                 student.avatar_url = urlData.publicUrl;
                 localStorage.setItem('avatar_url_' + student.id, finalUrl);
             } catch (e) {
@@ -6070,34 +6262,72 @@
     <style>
         /* ====== QR SHOW BUTTON ====== */
         .qr-show-btn {
-            display: flex; align-items: center; justify-content: center;
-            gap: 8px; margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
             padding: 9px 20px;
-            background: linear-gradient(135deg, rgba(245,166,35,0.12), rgba(245,166,35,0.06));
-            border: 1px solid rgba(245,166,35,0.35);
+            background: linear-gradient(135deg, rgba(245, 166, 35, 0.12), rgba(245, 166, 35, 0.06));
+            border: 1px solid rgba(245, 166, 35, 0.35);
             border-radius: 50px;
-            color: var(--primary); font-family: Cairo, sans-serif;
-            font-size: 0.85rem; font-weight: 700;
-            cursor: pointer; transition: all 0.2s ease;
+            color: var(--primary);
+            font-family: Cairo, sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
+
         .qr-show-btn:hover {
-            background: linear-gradient(135deg, rgba(245,166,35,0.22), rgba(245,166,35,0.12));
-            box-shadow: 0 0 18px rgba(245,166,35,0.25);
+            background: linear-gradient(135deg, rgba(245, 166, 35, 0.22), rgba(245, 166, 35, 0.12));
+            box-shadow: 0 0 18px rgba(245, 166, 35, 0.25);
             transform: translateY(-1px);
         }
-        .qr-show-btn i { font-size: 1rem; }
+
+        .qr-show-btn i {
+            font-size: 1rem;
+        }
 
         /* ====== OVERLAY ====== */
         .qr-modal-overlay {
-            position: fixed; inset: 0; z-index: 99999;
-            background: rgba(0,0,0,0.85);
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(10px);
-            display: none; align-items: center; justify-content: center;
+            display: none;
+            align-items: center;
+            justify-content: center;
             padding: 16px;
         }
-        .qr-modal-overlay.active { display: flex; animation: qrFadeIn 0.25s ease; }
-        @keyframes qrFadeIn { from { opacity:0; } to { opacity:1; } }
-        @keyframes qrSlideUp { from { opacity:0; transform:scale(0.92) translateY(20px); } to { opacity:1; transform:scale(1) translateY(0); } }
+
+        .qr-modal-overlay.active {
+            display: flex;
+            animation: qrFadeIn 0.25s ease;
+        }
+
+        @keyframes qrFadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes qrSlideUp {
+            from {
+                opacity: 0;
+                transform: scale(0.92) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
 
         /* ====== CARD BASE ====== */
         .qr-modal-card {
@@ -6105,13 +6335,13 @@
             width: 100%;
             background: linear-gradient(160deg, #0f1b2e 0%, #080d18 100%);
             border-radius: 28px;
-            border: 1px solid rgba(245,166,35,0.2);
+            border: 1px solid rgba(245, 166, 35, 0.2);
             box-shadow:
-                0 40px 100px rgba(0,0,0,0.85),
-                0 0 0 1px rgba(255,255,255,0.04) inset,
-                0 0 80px rgba(245,166,35,0.05);
+                0 40px 100px rgba(0, 0, 0, 0.85),
+                0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+                0 0 80px rgba(245, 166, 35, 0.05);
             overflow: hidden;
-            animation: qrSlideUp 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            animation: qrSlideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         /* =============================
@@ -6123,16 +6353,18 @@
             display: flex;
             flex-direction: column;
         }
+
         .qr-col-right {
             position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 24px 16px 16px;
-            background: linear-gradient(180deg, rgba(245,166,35,0.07) 0%, transparent 60%);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+            background: linear-gradient(180deg, rgba(245, 166, 35, 0.07) 0%, transparent 60%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
             gap: 12px;
         }
+
         .qr-col-left {
             display: flex;
             flex-direction: column;
@@ -6145,10 +6377,22 @@
            نفس العمود الواحد بس أوسع
         ============================= */
         @media (min-width: 768px) {
-            .qr-modal-card { max-width: 480px; border-radius: 32px; }
-            .qr-modal-overlay { padding: 24px; }
-            .qr-col-right { padding: 44px 32px 28px; }
-            .qr-col-left { padding: 24px 28px; }
+            .qr-modal-card {
+                max-width: 480px;
+                border-radius: 32px;
+            }
+
+            .qr-modal-overlay {
+                padding: 24px;
+            }
+
+            .qr-col-right {
+                padding: 44px 32px 28px;
+            }
+
+            .qr-col-left {
+                padding: 24px 28px;
+            }
         }
 
         /* =============================
@@ -6156,21 +6400,26 @@
            عمودين جنب بجنب: right=QR, left=data
         ============================= */
         @media (min-width: 1024px) {
-            .qr-modal-overlay { padding: 32px; }
+            .qr-modal-overlay {
+                padding: 32px;
+            }
+
             .qr-modal-card {
                 max-width: 780px;
                 flex-direction: row;
                 align-items: stretch;
                 border-radius: 36px;
             }
+
             .qr-col-right {
                 width: 320px;
                 flex-shrink: 0;
                 border-bottom: none;
-                border-left: 1px solid rgba(255,255,255,0.06);
+                border-left: 1px solid rgba(255, 255, 255, 0.06);
                 padding: 48px 28px 36px;
                 justify-content: center;
             }
+
             .qr-col-left {
                 flex: 1;
                 padding: 36px 32px 32px;
@@ -6182,93 +6431,206 @@
            LARGE  (≥ 1440px)
         ============================= */
         @media (min-width: 1440px) {
-            .qr-modal-card { max-width: 880px; }
-            .qr-col-right { width: 360px; padding: 56px 36px 44px; }
-            .qr-col-left { padding: 44px 40px 40px; }
+            .qr-modal-card {
+                max-width: 880px;
+            }
+
+            .qr-col-right {
+                width: 360px;
+                padding: 56px 36px 44px;
+            }
+
+            .qr-col-left {
+                padding: 44px 40px 40px;
+            }
         }
 
         /* ====== زر X ====== */
         .qr-close-x {
-            position: absolute; top: 14px; left: 14px; z-index: 20;
-            width: 34px; height: 34px; border-radius: 50%;
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.13);
-            color: #6a7a9a; font-size: 0.85rem;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.22s cubic-bezier(0.4,0,0.2,1);
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            z-index: 20;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            color: #6a7a9a;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         .qr-close-x:hover {
-            background: rgba(244,63,94,0.18);
+            background: rgba(244, 63, 94, 0.18);
             color: #f43f5e;
-            border-color: rgba(244,63,94,0.4);
+            border-color: rgba(244, 63, 94, 0.4);
             transform: rotate(90deg);
-            box-shadow: 0 0 14px rgba(244,63,94,0.2);
+            box-shadow: 0 0 14px rgba(244, 63, 94, 0.2);
         }
 
         /* ====== RIGHT COL INTERNALS ====== */
         .qr-card-bg-glow {
-            position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
-            width: 280px; height: 280px;
-            background: radial-gradient(circle, rgba(245,166,35,0.13) 0%, transparent 68%);
-            pointer-events: none; z-index: 0;
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(245, 166, 35, 0.13) 0%, transparent 68%);
+            pointer-events: none;
+            z-index: 0;
         }
+
         .qr-identity {
-            display: flex; flex-direction: column; align-items: center;
-            gap: 6px; position: relative; z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            position: relative;
+            z-index: 1;
         }
+
         .qr-avatar-ring {
-            width: 62px; height: 62px; border-radius: 50%;
-            border: 2.5px solid rgba(245,166,35,0.55);
-            box-shadow: 0 0 0 5px rgba(245,166,35,0.07), 0 10px 28px rgba(0,0,0,0.45);
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            border: 2.5px solid rgba(245, 166, 35, 0.55);
+            box-shadow: 0 0 0 5px rgba(245, 166, 35, 0.07), 0 10px 28px rgba(0, 0, 0, 0.45);
             background: linear-gradient(135deg, #111e35, #0a1020);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; color: var(--primary);
-            overflow: hidden; margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+            overflow: hidden;
+            margin-bottom: 4px;
         }
-        .qr-avatar-ring img { width:100%; height:100%; object-fit:cover; }
+
+        .qr-avatar-ring img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         @media (min-width:1024px) {
-            .qr-avatar-ring { width: 96px; height: 96px; font-size: 2.3rem; }
+            .qr-avatar-ring {
+                width: 96px;
+                height: 96px;
+                font-size: 2.3rem;
+            }
         }
+
         @media (min-width:1440px) {
-            .qr-avatar-ring { width: 108px; height: 108px; font-size: 2.7rem; }
+            .qr-avatar-ring {
+                width: 108px;
+                height: 108px;
+                font-size: 2.7rem;
+            }
         }
 
         .qr-card-name {
-            font-size: 0.95rem; font-weight: 900;
-            color: #f0f4ff; letter-spacing: -0.01em; text-align: center;
+            font-size: 0.95rem;
+            font-weight: 900;
+            color: #f0f4ff;
+            letter-spacing: -0.01em;
+            text-align: center;
         }
-        @media (min-width:1024px) { .qr-card-name { font-size: 1.3rem; } }
-        @media (min-width:1440px) { .qr-card-name { font-size: 1.45rem; } }
+
+        @media (min-width:1024px) {
+            .qr-card-name {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (min-width:1440px) {
+            .qr-card-name {
+                font-size: 1.45rem;
+            }
+        }
 
         .qr-card-grade {
-            font-size: 0.8rem; font-weight: 700; color: var(--primary);
-            background: rgba(245,166,35,0.1); border: 1px solid rgba(245,166,35,0.22);
-            padding: 3px 14px; border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            background: rgba(245, 166, 35, 0.1);
+            border: 1px solid rgba(245, 166, 35, 0.22);
+            padding: 3px 14px;
+            border-radius: 50px;
         }
+
         .qr-card-id {
-            font-size: 0.67rem; color: #3d4e68;
-            font-family: monospace; letter-spacing: 0.1em;
+            font-size: 0.67rem;
+            color: #3d4e68;
+            font-family: monospace;
+            letter-spacing: 0.1em;
         }
 
         /* ====== QR CODE BLOCK ====== */
         .qr-code-block {
-            display: flex; flex-direction: column; align-items: center;
-            gap: 10px; position: relative; z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
         }
+
         .qr-label-text {
-            font-size: 0.72rem; color: rgba(74,90,122,0.75); font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.09em;
+            font-size: 0.72rem;
+            color: rgba(74, 90, 122, 0.75);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
         }
+
         .qr-white-box {
-            background: #fff; border-radius: 18px; padding: 12px;
-            box-shadow: 0 10px 36px rgba(0,0,0,0.45), 0 0 0 4px rgba(245,166,35,0.1);
+            background: #fff;
+            border-radius: 18px;
+            padding: 12px;
+            box-shadow: 0 10px 36px rgba(0, 0, 0, 0.45), 0 0 0 4px rgba(245, 166, 35, 0.1);
         }
-        .qr-white-box canvas { display: block; border-radius: 5px; }
+
+        .qr-white-box canvas {
+            display: block;
+            border-radius: 5px;
+        }
+
         /* canvas size by breakpoint */
-        .qr-white-box canvas { width: 140px !important; height: 140px !important; }
-        @media (min-width:768px)  { .qr-white-box canvas { width: 190px !important; height: 190px !important; } }
-        @media (min-width:1024px) { .qr-white-box canvas { width: 200px !important; height: 200px !important; } .qr-white-box { padding: 14px; border-radius: 22px; } }
-        @media (min-width:1440px) { .qr-white-box canvas { width: 220px !important; height: 220px !important; } }
+        .qr-white-box canvas {
+            width: 140px !important;
+            height: 140px !important;
+        }
+
+        @media (min-width:768px) {
+            .qr-white-box canvas {
+                width: 190px !important;
+                height: 190px !important;
+            }
+        }
+
+        @media (min-width:1024px) {
+            .qr-white-box canvas {
+                width: 200px !important;
+                height: 200px !important;
+            }
+
+            .qr-white-box {
+                padding: 14px;
+                border-radius: 22px;
+            }
+        }
+
+        @media (min-width:1440px) {
+            .qr-white-box canvas {
+                width: 220px !important;
+                height: 220px !important;
+            }
+        }
 
         /* ====== LEFT COL: DETAILS ====== */
         .qr-card-details {
@@ -6277,25 +6639,45 @@
             gap: 10px;
             flex: 1;
         }
+
         .qr-detail-item {
-            background: linear-gradient(135deg, rgba(19,29,48,0.85), rgba(30,44,70,0.45));
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 11px; padding: 8px 10px;
+            background: linear-gradient(135deg, rgba(19, 29, 48, 0.85), rgba(30, 44, 70, 0.45));
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 11px;
+            padding: 8px 10px;
             transition: all 0.2s ease;
         }
+
         .qr-detail-item:hover {
-            border-color: rgba(245,166,35,0.22);
-            background: linear-gradient(135deg, rgba(245,166,35,0.06), rgba(19,29,48,0.85));
+            border-color: rgba(245, 166, 35, 0.22);
+            background: linear-gradient(135deg, rgba(245, 166, 35, 0.06), rgba(19, 29, 48, 0.85));
             transform: translateY(-1px);
         }
+
         .qr-detail-label {
-            font-size: 0.62rem; color: rgba(74,90,122,0.85); font-weight: 800;
-            margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.07em;
+            font-size: 0.62rem;
+            color: rgba(74, 90, 122, 0.85);
+            font-weight: 800;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
         }
-        .qr-detail-val { font-size: 0.88rem; color: #e8eeff; font-weight: 800; }
+
+        .qr-detail-val {
+            font-size: 0.88rem;
+            color: #e8eeff;
+            font-weight: 800;
+        }
+
         @media (min-width:1024px) {
-            .qr-detail-item { padding: 14px 16px; border-radius: 14px; }
-            .qr-detail-val { font-size: 0.92rem; }
+            .qr-detail-item {
+                padding: 14px 16px;
+                border-radius: 14px;
+            }
+
+            .qr-detail-val {
+                font-size: 0.92rem;
+            }
         }
 
         /* ====== LEFT COL: ACTIONS ====== */
@@ -6304,47 +6686,75 @@
             flex-direction: column;
             gap: 10px;
         }
+
         /* على الموبايل: الأزرار جنب بجنب */
         @media (max-width: 767px) {
-            .qr-card-actions { flex-direction: row; }
+            .qr-card-actions {
+                flex-direction: row;
+            }
         }
 
         .qr-btn-share {
-            flex: 1; display: flex; align-items: center; justify-content: center; gap: 9px;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
             padding: 11px 16px;
             background: linear-gradient(135deg, #f5a623, #d4890a);
-            border: none; border-radius: 14px;
-            color: #0a0e1a; font-family: Cairo, sans-serif;
-            font-size: 0.92rem; font-weight: 900;
-            cursor: pointer; transition: all 0.22s cubic-bezier(0.4,0,0.2,1);
-            box-shadow: 0 6px 22px rgba(245,166,35,0.38), 0 2px 0 rgba(255,255,255,0.12) inset;
-            letter-spacing: 0.01em; white-space: nowrap;
-        }
-        .qr-btn-share:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 14px 32px rgba(245,166,35,0.52);
-            background: linear-gradient(135deg, #ffb83a, #e8940f);
-        }
-        .qr-btn-share:active { transform: translateY(0); }
-        .qr-btn-share:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-        .qr-btn-close {
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            padding: 13px 20px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: none;
             border-radius: 14px;
-            color: #6a7a9a; font-family: Cairo, sans-serif;
-            font-size: 0.9rem; font-weight: 800;
-            cursor: pointer; transition: all 0.22s cubic-bezier(0.4,0,0.2,1);
+            color: #0a0e1a;
+            font-family: Cairo, sans-serif;
+            font-size: 0.92rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 22px rgba(245, 166, 35, 0.38), 0 2px 0 rgba(255, 255, 255, 0.12) inset;
+            letter-spacing: 0.01em;
             white-space: nowrap;
         }
+
+        .qr-btn-share:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 32px rgba(245, 166, 35, 0.52);
+            background: linear-gradient(135deg, #ffb83a, #e8940f);
+        }
+
+        .qr-btn-share:active {
+            transform: translateY(0);
+        }
+
+        .qr-btn-share:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .qr-btn-close {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 20px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            color: #6a7a9a;
+            font-family: Cairo, sans-serif;
+            font-size: 0.9rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+        }
+
         .qr-btn-close:hover {
-            background: rgba(244,63,94,0.1);
-            border-color: rgba(244,63,94,0.3);
+            background: rgba(244, 63, 94, 0.1);
+            border-color: rgba(244, 63, 94, 0.3);
             color: #f43f5e;
             transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(244,63,94,0.14);
+            box-shadow: 0 6px 18px rgba(244, 63, 94, 0.14);
         }
     </style>
 
@@ -6366,7 +6776,7 @@
                 };
                 img.onerror = () => {
                     const ctx = canvas.getContext('2d');
-                    ctx.fillStyle = '#fff'; ctx.fillRect(0,0,180,180);
+                    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, 180, 180);
                     ctx.fillStyle = '#999'; ctx.font = '12px Arial';
                     ctx.textAlign = 'center'; ctx.fillText('تعذّر تحميل QR', 90, 90);
                     resolve(false);
@@ -6386,7 +6796,7 @@
             const qrData = JSON.stringify({
                 id: student.id,
                 name: student.full_name || student.name || 'طالب',
-                grade: student.grade || 'غير محدد',
+                grade: gradeLabel(student.grade),
                 phone: student.phone || '',
                 joined: student.created_at ? new Date(student.created_at).toLocaleDateString('ar-EG') : '',
                 platform: 'ابن القائد'
@@ -6394,7 +6804,7 @@
 
             // Fill student info
             document.getElementById('qrStudentName').textContent = student.full_name || student.name || 'طالب';
-            document.getElementById('qrStudentGrade').textContent = student.grade || 'غير محدد';
+            document.getElementById('qrStudentGrade').textContent = gradeLabel(student.grade);
             document.getElementById('qrIdLabel').textContent = 'ID: ' + (student.id || '').toString().slice(0, 8).toUpperCase();
 
             // Avatar
@@ -6414,7 +6824,7 @@
             grid.innerHTML = '';
             const details = [
                 { label: 'الاسم', val: student.full_name || student.name || '—' },
-                { label: 'الصف', val: student.grade || '—' },
+                { label: 'الصف', val: gradeLabel(student.grade) },
                 { label: 'رقم الهاتف', val: student.phone || '—' },
                 { label: 'تاريخ الانضمام', val: student.created_at ? new Date(student.created_at).toLocaleDateString('ar-EG') : '—' },
                 { label: 'المنصة', val: 'ابن القائد' }
@@ -6501,7 +6911,7 @@
 
                 ctx.fillStyle = '#f5a623';
                 ctx.font = 'bold 15px Cairo, Arial';
-                ctx.fillText(student.grade || '', 210, 372);
+                ctx.fillText(gradeLabel(student.grade) || '', 210, 372);
 
                 ctx.strokeStyle = 'rgba(255,255,255,0.08)';
                 ctx.lineWidth = 1;
@@ -6601,23 +7011,6 @@
             const saved = localStorage.getItem(THEME_KEY) || 'dark';
             applyTheme(saved);
         })();
-    </script>
-
-    <!-- ✅ دالة watchVideo مباشرة هنا عشان تكون متاحة في أي وقت -->
-    <script>
-        function watchVideo(courseId, courseTitle, videoUrl) {
-            if (!videoUrl) {
-                alert('عذراً، لا يوجد فيديو متاح لهذا الدرس.');
-                return;
-            }
-            console.log("Opening Video:", { id: courseId, title: courseTitle, url: videoUrl });
-            const params = new URLSearchParams();
-            params.append('courseId', courseId);
-            params.append('title', courseTitle);
-            params.append('url', videoUrl);
-            params.append('timestamp', Date.now());
-            window.location.href = 'video-player.html?' + params.toString();
-        }
     </script>
 </body>
 
