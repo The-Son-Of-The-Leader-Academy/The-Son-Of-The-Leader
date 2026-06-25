@@ -3675,7 +3675,7 @@
 
     <link rel="stylesheet" href="responsive-design.css">
     <script src="security-and-live.js" defer></script>
-    <!-- watchVideoFunction مدمجة مباشرة في الصفحة في الأسفل -->
+    <!-- watchVideoFunction مدمجة في الأسفل -->
 </head>
 
 <body>
@@ -5186,7 +5186,29 @@
                     if (error) { StudentApp.ui.showAlert('خطأ في حفظ الصف', 'error'); return; }
                     StudentApp.state.currentUser.grade = grade;
                     localStorage.setItem('leader_grade', grade);
-                    GlobalSearch.invalidate(); // أعد بناء الـ index للصف الجديد
+
+                    // ✅ نعيد فلترة purchasedIds على الصف الجديد بس
+                    const { data: gradeCoursesRaw } = await StudentApp.client
+                        .from('courses_public').select('id').eq('grade', grade);
+                    const gradeCourseIds = new Set((gradeCoursesRaw || []).map(c => c.id));
+                    const allDirectIds = StudentApp.state.directPurchasedIds || [];
+                    const filteredDirectIds = allDirectIds.filter(id => gradeCourseIds.has(id));
+                    let fromPlaylists = [];
+                    if (filteredDirectIds.length > 0) {
+                        const { data: playlistCourses } = await StudentApp.client
+                            .from('courses_public').select('id, type, video_url').in('id', filteredDirectIds).eq('type', 'playlist');
+                        if (playlistCourses) {
+                            playlistCourses.forEach(p => {
+                                if (p.video_url) {
+                                    try { const ids = JSON.parse(p.video_url); if (Array.isArray(ids)) fromPlaylists.push(...ids); }
+                                    catch (e) {}
+                                }
+                            });
+                        }
+                    }
+                    StudentApp.state.purchasedIds = Array.from(new Set([...filteredDirectIds, ...fromPlaylists]));
+
+                    GlobalSearch.invalidate();
                     GlobalSearch.buildIndex();
                     StudentApp.ui.showAlert(`✅ تم تحديث الصف إلى: ${grade}`, 'success');
                     // لو مفيش avatar — اعرض شاشة اختيار الصورة
