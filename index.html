@@ -4530,12 +4530,20 @@
                         const isSubscribed = StudentApp.state.purchasedIds.includes(courseId) || (insidePlaylist && courseIsFree);
                         const isPending = StudentApp.state.pendingIds.includes(courseId);
                         if (isSubscribed) {
-                            // جيب video_url من courses مباشرة (مش courses_public اللي مش فيها الرابط)
                             if (courseType === 'video') {
-                                StudentApp.client.from('courses').select('video_url').eq('id', courseId).single().then(({ data }) => {
-                                    if (!data || !data.video_url) { alert('عذراً، لا يوجد فيديو متاح لهذا الدرس.'); return; }
-                                    watchVideo(courseId, title, data.video_url);
-                                });
+                                // ✅ استخدام video_url المحفوظ في الكارد مباشرة بدون query جديد
+                                const _unmask = (s) => {
+                                    try {
+                                        if (!s) return '';
+                                        if (s.startsWith('http')) return s;
+                                        const reversed = s.split('').reverse().join('');
+                                        return decodeURIComponent(escape(atob(reversed)));
+                                    } catch(e) { return s; }
+                                };
+                                const maskedUrl = card.dataset.videoUrl || '';
+                                const videoUrl = _unmask(maskedUrl);
+                                if (!videoUrl) { alert('عذراً، لا يوجد فيديو متاح لهذا الدرس.'); return; }
+                                watchVideo(courseId, title, videoUrl);
                             }
                             else if (courseType === 'pdf') StudentApp.actions.downloadPDF(pdfUrl);
                             else if (courseType === 'playlist') StudentApp.actions.openPlaylist(courseId, title, null);
@@ -5252,12 +5260,23 @@
                         StudentApp.state.selectedPaymentMethod = null;
                         document.getElementById('paymentModal').classList.add('active');
                     } else {
-                        StudentApp.client.from('courses').select('video_url, pdf_url').eq('id', courseId).single().then(({ data }) => {
-                            if (!data) return;
-                            if (type === 'pdf') StudentApp.actions.downloadPDF(data.pdf_url);
-                            else if (type === 'playlist') StudentApp.actions.openPlaylist(courseId, title, data.video_url);
-                            else watchVideo(courseId, title, data.video_url);
-                        });
+                        // ✅ استخدام video_url من الكارد مباشرة بدون query
+                        const _unmask = (s) => {
+                            try {
+                                if (!s) return '';
+                                if (s.startsWith('http')) return s;
+                                const reversed = s.split('').reverse().join('');
+                                return decodeURIComponent(escape(atob(reversed)));
+                            } catch(e) { return s; }
+                        };
+                        const card = document.querySelector(`.course-card[data-course-id="${courseId}"]`);
+                        const maskedUrl = card ? card.dataset.videoUrl : '';
+                        const maskedPdf = card ? card.dataset.pdfUrl : '';
+                        const videoUrl = _unmask(maskedUrl);
+                        const pdfUrl = maskedPdf;
+                        if (type === 'pdf') StudentApp.actions.downloadPDF(pdfUrl);
+                        else if (type === 'playlist') StudentApp.actions.openPlaylist(courseId, title, videoUrl);
+                        else watchVideo(courseId, title, videoUrl);
                     }
                 },
 
