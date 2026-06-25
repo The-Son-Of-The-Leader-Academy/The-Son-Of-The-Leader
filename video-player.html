@@ -1104,14 +1104,11 @@
         function _unmask(s) {
             try {
                 if (!s) return '';
-                // فك الـ encodeURIComponent اللي عملاه في _mask
                 let decoded = s;
                 try { decoded = decodeURIComponent(s); } catch (_) {}
-                // لو URL مباشر → رجّعه زي ما هو
                 if (decoded.startsWith('http')) return decoded;
-                // فك التشفير: reverse ثم atob
                 const reversed = decoded.split('').reverse().join('');
-                return decodeURIComponent(escape(atob(reversed)));
+                return decodeURIComponent(atob(reversed));
             } catch (e) { return ''; }
         }
 
@@ -1736,10 +1733,9 @@
         document.addEventListener('DOMContentLoaded', () => GL.init());
     </script>
 
-    <!-- Quality Menu (fixed, outside all kk containers) -->
+    <!-- Quality Menu (fixed, outside all containers) -->
     <div id="quality-menu"></div>
 
 </body>
 
-    
 </html>
