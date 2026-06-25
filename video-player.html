@@ -1093,11 +1093,24 @@
             try { return new URLSearchParams(location.search).get(k) || ''; } catch (e) { return ''; }
         }
 
+        // جيب الـ param خام بدون أي URL decoding (للـ url المشفر)
+        function _getRawParam(k) {
+            try {
+                const match = location.search.match(new RegExp('[?&]' + k + '=([^&]*)'));
+                return match ? match[1] : '';
+            } catch (e) { return ''; }
+        }
+
         function _unmask(s) {
             try {
                 if (!s) return '';
-                if (s.startsWith('http')) return '';
-                let reversed = s.split('').reverse().join('');
+                // فك الـ encodeURIComponent اللي عملاه في _mask
+                let decoded = s;
+                try { decoded = decodeURIComponent(s); } catch (_) {}
+                // لو URL مباشر → رجّعه زي ما هو
+                if (decoded.startsWith('http')) return decoded;
+                // فك التشفير: reverse ثم atob
+                const reversed = decoded.split('').reverse().join('');
                 return decodeURIComponent(escape(atob(reversed)));
             } catch (e) { return ''; }
         }
@@ -1105,7 +1118,8 @@
         function _getParamVideoId() {
             let id = _getParam('videoId');
             if (id) return id;
-            let rawUrl = _getParam('url');
+            // نجيب الـ url خام بدون double-decode
+            let rawUrl = _getRawParam('url');
             if (rawUrl) {
                 let url = _unmask(rawUrl);
                 return _extractYTId(url);
