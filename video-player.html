@@ -1095,10 +1095,11 @@
 
         function _unmask(s) {
             try {
-                if (!s || s.startsWith('http')) return s;
+                if (!s) return '';
+                if (s.startsWith('http')) return '';
                 let reversed = s.split('').reverse().join('');
                 return decodeURIComponent(escape(atob(reversed)));
-            } catch (e) { return s; }
+            } catch (e) { return ''; }
         }
 
         function _getParamVideoId() {
@@ -1113,6 +1114,7 @@
         }
         function _extractYTId(url) {
             if (!url) return '';
+            // يدعم كل أشكال روابط يوتيوب: watch?v=, youtu.be/, /embed/, /shorts/, /live/
             let m = url.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/)([a-zA-Z0-9_-]{11})/);
             return m ? m[1] : '';
         }
@@ -1146,32 +1148,63 @@
             }
 
             function devToolsGuard() {
-                let threshold = 160;
+                // طريقة 1: فرق الحجم (docked devtools)
+                const _check = () => {
+                    const wDiff = window.outerWidth - window.innerWidth;
+                    const hDiff = window.outerHeight - window.innerHeight;
+                    const open = wDiff > 160 || hDiff > 160;
+                    const shell = document.getElementById('playerShell');
+                    if (shell) shell.style.filter = open ? 'blur(18px)' : '';
+                    if (open) GL.toast('🔒 أغلق DevTools لمتابعة الفيديو', 'error');
+                };
+                setInterval(_check, 800);
+
+                // طريقة 2: debugger trap
                 setInterval(() => {
-                    if ((window.outerWidth - window.innerWidth > threshold) ||
-                        (window.outerHeight - window.innerHeight > threshold)) {
-                        document.getElementById('playerShell').style.filter = 'blur(15px)';
-                        GL.toast('⚠️ أغلق DevTools لمتابعة المشاهدة', 'error');
-                    } else {
-                        document.getElementById('playerShell').style.filter = '';
+                    const t = performance.now();
+                    (function() { debugger; })();
+                    if (performance.now() - t > 100) {
+                        const shell = document.getElementById('playerShell');
+                        if (shell) shell.style.filter = 'blur(18px)';
+                        GL.toast('🔒 أغلق DevTools لمتابعة الفيديو', 'error');
                     }
-                }, 1200);
+                }, 3000);
             }
 
             function blockHotkeys() {
                 document.addEventListener('keydown', e => {
-                    const ctrlOrMeta = e.ctrlKey || e.metaKey;
+                    const ctrl = e.ctrlKey || e.metaKey;
                     const shift = e.shiftKey;
-                    const key = e.key.toUpperCase();
+                    const key = e.key;
+                    const K = key.toUpperCase();
 
-                    if (e.key === 'F12' ||
-                        (ctrlOrMeta && ['U', 'S', 'P', 'A'].includes(key)) ||
-                        (ctrlOrMeta && shift && ['I', 'J', 'C', 'K'].includes(key))) {
-                        e.preventDefault(); e.stopPropagation();
+                    const blocked =
+                        key === 'F12' ||
+                        key === 'F11' ||
+                        key === 'F10' ||
+                        key === 'F9'  ||
+                        key === 'F8'  ||
+                        key === 'F5'  ||
+                        (ctrl && K === 'U') ||
+                        (ctrl && K === 'S') ||
+                        (ctrl && K === 'P') ||
+                        (ctrl && shift && K === 'I') ||
+                        (ctrl && shift && K === 'J') ||
+                        (ctrl && shift && K === 'C') ||
+                        (ctrl && shift && K === 'K') ||
+                        (ctrl && shift && K === 'E') ||
+                        (ctrl && shift && K === 'M') ||
+                        (ctrl && shift && K === 'P') ||
+                        (ctrl && shift && K === 'S') ||
+                        (ctrl && K === 'F5');
+
+                    if (blocked) {
+                        e.preventDefault();
+                        e.stopPropagation();
                         GL.toast('🔒 هذا الإجراء محظور لحماية المحتوى', 'error');
                         return false;
                     }
-                });
+                }, true);
             }
 
             function _landscapeGuard() {
@@ -1415,6 +1448,7 @@
 
                 _player.on('error', function () {
                     GL.toast('❌ خطأ في تحميل الفيديو', 'error');
+                    // إظهار رسالة واضحة مع زرار للفتح على YouTube مباشرة
                     const skeleton = document.getElementById('playerSkeleton');
                     const container = document.getElementById('vjsContainer');
                     if (container) container.style.display = 'none';
@@ -1422,8 +1456,10 @@
                         skeleton.style.display = 'flex';
                         skeleton.innerHTML = `
                             <i class="fas fa-circle-exclamation" style="font-size:2.5rem;color:#ff5b5b;"></i>
-                            <span style="color:#e8edf5;font-weight:700;">تعذّر تحميل الفيديو</span>
-                            <span style="color:#8b96aa;font-size:0.82rem;">يرجى التواصل مع الإدارة</span>`;
+                            <span style="color:#e8edf5;font-weight:700;">تعذّر تشغيل الفيديو هنا</span>
+                            <span style="color:#8b96aa;font-size:0.82rem;">قد يكون الفيديو غير متاح للتشغيل المضمّن</span>
+    
+                            </a>`;
                     }
                 });
             }
